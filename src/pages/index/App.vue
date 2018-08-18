@@ -1,6 +1,6 @@
 <template>
   <div id="app1" class="layui-layout layui-layout-admin">
-    <zs-nav :navList="navList"></zs-nav>
+    <zs-nav :navList="navList" @onNavItemClick="navItemClick"></zs-nav>
     <router-view>
 
     </router-view>
@@ -65,6 +65,11 @@
             ]
           }
         ]
+      }
+    },
+    methods:{
+      navItemClick(item){
+          console.log(item);
       }
     }
   }
