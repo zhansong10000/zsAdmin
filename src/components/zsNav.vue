@@ -1,24 +1,24 @@
 <template>
   <div class="zs-side zs-bg-black">
-    <div class="zs-side-scroll">
+    <div class="zs-side-scroll"  @mouseleave="onMouseLeave($event)" >
       <ul class="zs-nav zs-nav-tree site-demo-nav">
-        <template v-for="(item,index) in navList">
-          <li  v-if="item.children&&item.children.length>0" class="zs-nav-item" :class="{'zs-nav-itemed':item.isCur == true}" @mouseover="onMouseOver('1',$event)">
-            <a  href="javascript:void(0);" @click="onNavItemClick(item,index)">{{item.name}}
+        <template v-for="(item,index) in dataList">
+          <li  v-if="item.children&&item.children.length>0" class="zs-nav-item" :class="{'zs-nav-itemed':item.isCur == true}" @mouseenter="onMouseEnter('1',$event)">
+            <a  href="javascript:void(0);" @click="onItemClick(item,index)">{{item.name}}
               <span class="zs-nav-more" ></span>
             </a>
             <dl class="zs-nav-child">
               <dd  v-for="(child,childIndex) in item.children" :class="{'zs-this':activeIndex== index+'-'+childIndex}">
-                <a href="javascript:void(0);" @click="onNavItemChildClick(child,index,childIndex)">{{child.name}}</a>
+                <a href="javascript:void(0);" @click="onItemChildClick(child,index,childIndex)">{{child.name}}</a>
               </dd>
             </dl>
           </li>
-          <li v-else class="zs-nav-item" :class="{'zs-this':activeIndex== index+'-0'}"  @mouseover="onMouseOver('1',$event)">
-            <a  href="javascript:void(0);" @click="onNavItemChildClick(item,index,0)">{{item.name}}
+          <li v-else class="zs-nav-item" :class="{'zs-this':activeIndex== index+'-0'}"  @mouseenter="onMouseEnter('1',$event)">
+            <a  href="javascript:void(0);" @click="onItemChildClick(item,index,0)">{{item.name}}
             </a>
           </li>
         </template>
-        <li class="zs-nav-item" style="height: 30px; text-align: center" @mouseover="onMouseOver('2',$event)"></li>
+        <li class="zs-nav-item" style="height: 30px; text-align: center" @mouseenter="onMouseEnter('2',$event)"></li>
         <span class="zs-nav-bar" :style="navBarStyle"></span>
       </ul>
     </div>
@@ -28,10 +28,16 @@
   export default {
     name: "zs-nav",
     props: {
-      navList: {
+      dataList: {
         type: Array,
-        default: function () {
-          return [];
+        default:()=>{
+          [];
+        }
+      },
+      curItem:{
+        type:Object,
+        default:()=>{
+          return null;
         }
       }
     },
@@ -39,7 +45,8 @@
       return{
         activeIndex:-1,
         offsetTop:'',
-        mouseType:'1'
+        mouseType:'1',
+        navBarStyle:''
       }
     },
     mounted(){
@@ -49,31 +56,74 @@
       }*/
     },
     methods:{
-      onNavItemClick(item,index){
+      onItemClick(item,index){
         let vm = this;
         if(!item.isCur){
           item.isCur = true;
         }else{
           item.isCur = false;
         }
-        vm.$set(vm.navList, index, item);
+        vm.$set(vm.dataList, index, item);
       },
-      onNavItemChildClick(item,index,childIndex){
+      onItemChildClick(item,index,childIndex){
         this.activeIndex = index+'-'+childIndex;
-        this.$emit('onNavItemClick',item);
+        this.$router.push(item.href);
+        this.$emit('onItemClick',item);
       },
-      onMouseOver(mouseType, event){
+      onMouseEnter(mouseType, event){
           this.mouseType = mouseType;
           this.offsetTop = event.currentTarget.offsetTop +'px';
+      },
+      onMouseLeave(event){
+       // this.offsetTop = 0;
+        this.navBarStyle ='top: '+this.offsetTop+';height:0px; opacity: 0;transition:all 0.5s';
+        this.offsetTop = -1;
+      },
+      setActiveItem(item){
+        let vm = this;
+
+        if(item){
+          vm.$router.push(item.href);
+        }else{
+          vm.$router.push("/");
+          return;
+        }
+        for(let i =0;i<vm.dataList.length;i++){
+          let temp = vm.dataList[i];
+          if(temp.children&&temp.children.length>0){
+            for(let j =0;j<temp.children.length;j++){
+              let childTemp = temp.children[j];
+              if(childTemp.name == item.name){
+                temp.isCur = true;
+                vm.activeIndex = i+'-'+j;
+                break;
+              }
+            }
+          }else{
+            if(temp.name == item.name){
+              vm.activeIndex = i+'-0';
+              break;
+            }
+          }
+        }
       }
     },
     computed:{
-      navBarStyle(){
-          if(this.mouseType=="1"){
-            return 'top: '+this.offsetTop+'; height: 45px; opacity: 1;';
-          }else{
-            return 'top: '+this.offsetTop+';height: 0px; opacity: 0;';
-          }
+
+    },
+    watch: {
+      curItem(newVal, oldVal){
+        this.setActiveItem(newVal);
+      },
+      offsetTop( newVal, oldVal){
+        if(newVal ==-1){
+            return;
+        }
+        if(this.mouseType=="1"){
+          this.navBarStyle = 'top: '+newVal+'; height: 45px; opacity: 1;';
+        }else{
+          this.navBarStyle = 'top: '+newVal+';height:0px; opacity: 0;transition:all 0.5s';
+        }
       }
     }
   }
@@ -90,7 +140,7 @@
     top: 0;
     bottom: 0;
     z-index: 999;
-    width: 200px;
+    width: 220px;
     overflow-x: hidden;
     .zs-side-scroll {
       position: relative;
@@ -99,47 +149,33 @@
       overflow-x: hidden
     }
   }
-
-  .zs-nav {
-    position: relative;
-    padding: 0 20px;
-    background-color: #393D49;
-    color: #fff;
-    border-radius: 2px;
-    font-size: 0;
-    box-sizing: border-box
-  }
-
-  .zs-nav {
-    position: relative;
-    padding: 0 20px;
-    background-color: #393D49;
-    color: #fff;
-    border-radius: 2px;
-    font-size: 0;
-    box-sizing: border-box
-  }
-
   .zs-nav * {
     font-size: 14px
   }
-
-  .zs-nav .zs-nav-item {
+  .zs-nav {
     position: relative;
-    display: inline-block;
-    *display: inline;
-    *zoom: 1;
-    vertical-align: middle;
-    line-height: 60px
-  }
-
-  .zs-nav .zs-nav-item a {
-    display: block;
     padding: 0 20px;
+    background-color: #393D49;
     color: #fff;
-    color: rgba(255, 255, 255, .7);
-    transition: all .3s;
-    -webkit-transition: all .3s
+    border-radius: 2px;
+    font-size: 0;
+    box-sizing: border-box;
+    .zs-nav-item {
+      position: relative;
+      display: inline-block;
+      display: inline;
+      zoom: 1;
+      vertical-align: middle;
+      line-height: 60px;
+      a {
+        display: block;
+        padding: 0 20px;
+        color: #fff;
+        color: rgba(255, 255, 255, .7);
+        transition: all .3s;
+        -webkit-transition: all .3s
+      }
+    }
   }
 
   .zs-nav .zs-this:after, .zs-nav-bar, .zs-nav-tree .zs-nav-itemed:after {
@@ -238,7 +274,7 @@
   }
 
   .zs-nav-tree {
-    width: 200px;
+    width: 220px;
     padding: 0
   }
 

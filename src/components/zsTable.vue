@@ -62,8 +62,8 @@
     props: {
       dataList: {
         type: Array,
-        default: function() {
-          return [];
+        default:()=>{
+          [];
         }
       },
       columnModel: {
