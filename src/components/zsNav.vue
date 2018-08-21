@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+  import { mapMutations ,mapState } from 'vuex';
   export default {
     name: "zs-nav",
     props: {
@@ -32,12 +33,6 @@
         type: Array,
         default:()=>{
           [];
-        }
-      },
-      curItem:{
-        type:Object,
-        default:()=>{
-          return null;
         }
       }
     },
@@ -68,23 +63,22 @@
       onItemChildClick(item,index,childIndex){
         this.activeIndex = index+'-'+childIndex;
         this.$router.push(item.href);
-        this.$emit('onItemClick',item);
+        this.add(item);
       },
       onMouseEnter(mouseType, event){
           this.mouseType = mouseType;
           this.offsetTop = event.currentTarget.offsetTop +'px';
       },
       onMouseLeave(event){
-       // this.offsetTop = 0;
         this.navBarStyle ='top: '+this.offsetTop+';height:0px; opacity: 0;transition:all 0.5s';
         this.offsetTop = -1;
       },
       setActiveItem(item){
         let vm = this;
-
         if(item){
           vm.$router.push(item.href);
         }else{
+          vm.activeIndex ="";
           vm.$router.push("/");
           return;
         }
@@ -106,10 +100,15 @@
             }
           }
         }
-      }
+      },
+      ...mapMutations({
+        add: 'ADD_NAV_ITEM'
+      })
     },
     computed:{
-
+      ...mapState({
+        curItem: state => state.curItem,
+      })
     },
     watch: {
       curItem(newVal, oldVal){
@@ -144,7 +143,7 @@
     overflow-x: hidden;
     .zs-side-scroll {
       position: relative;
-      width: 220px;
+      width: 240px;
       height: 100%;
       overflow-x: hidden
     }

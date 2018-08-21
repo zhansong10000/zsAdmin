@@ -2,32 +2,67 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
-const CHOOSE_GOOD = 'CHOOSE_GOOD';
-const SUBMIT_ORDER= 'SUBMIT_ORDER';
-const OPENID = 'OPENID';
+const ADD_NAV_ITEM = 'ADD_NAV_ITEM';
+const REMOVE_NAV_ITEM = 'REMOVE_NAV_ITEM';
+const SET_CUR_ITEM = 'SET_CUR_ITEM';
 
 const state = {
-  good: "", //商品
-  order:"",//订单
-  openId:''//openId
+  navList: [], //导航列表
+  curItem:{} //当前选中项
 }
 const mutations = {
-  [CHOOSE_GOOD](state,good){
-    state.good = good;
+  [ADD_NAV_ITEM](state, item) {
+    let isExist = false;
+    for (let i = 0; i < state.navList.length; i++) {
+      let temp = state.navList[i];
+      if (temp.name == item.name) {
+        temp.isSelect = true;
+        isExist = true;
+      } else {
+        temp.isSelect = false;
+      }
+      Vue.set(state.navList, i, temp);
+    }
+    if (state.navList.length == 0 || !isExist) {
+      item.isSelect = true;
+      state.navList.push(item);
+    }
   },
-  [SUBMIT_ORDER](state,order){
-    state.order = order;
+  [REMOVE_NAV_ITEM](state, itemObj) {
+    let item = itemObj.item;
+    let index = itemObj.index;
+    if(item.isSelect){
+      var nextIndex = index-1;
+      if(nextIndex<0){
+        nextIndex =1 ;
+      }
+      var nextItem = state.navList[nextIndex];
+      if(nextItem){
+        nextItem.isSelect = true;
+        state.curItem = nextItem
+        Vue.set(state.navList, nextIndex, nextItem);
+      }else{
+        state.curItem = null;
+      }
+    }
+    state.navList.splice(index,1);
   },
-  [OPENID](state,openId){
-    state.openId = openId;
+  [SET_CUR_ITEM](state, itemObj){
+    let item = itemObj.item;
+    let index = itemObj.index;
+    for(let temp of state.navList){
+      temp.isSelect = false;
+    }
+    item.isSelect = true;
+    state.curItem = item;
+    Vue.set( state.navList, index, item);
   }
 }
-
-const actions = {
-
-}
+const getters = {}
+const actions = {}
 export default new Vuex.Store({
   state,
   actions,
-  mutations
+  mutations,
+  getters
 })

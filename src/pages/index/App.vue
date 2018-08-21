@@ -1,13 +1,6 @@
 <template>
-  <div id="app1" class="layui-layout layui-layout-admin">
-    <zs-nav :dataList="navList" :curItem="curNavItem" @onItemClick="onNavItemClick"></zs-nav>
-    <zs-navTab :dataList="navTabList" :newItem="newNavTabItem" @onItemSelect="onNavTabItemSelect"></zs-navTab>
-    <div class="zs-body">
-      <router-view>
-
-      </router-view>
-    </div>
-
+  <div id="app1" >
+    <router-view />
   </div>
 </template>
 
@@ -102,10 +95,5 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
-  }
-  .zs-body{
-    position:absolute;
-    top:40px;
-    left:220px;
   }
 </style>

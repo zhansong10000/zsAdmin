@@ -1,9 +1,9 @@
 <template>
   <div class="zs-pagetabs">
-    <div class="zs-icon zs-tabs-control zs-icon-prev" layadmin-event="leftPage"></div>
-    <div class="zs-icon zs-tabs-control zs-icon-next" layadmin-event="rightPage"></div>
-    <div class="zs-tab">
-      <ul class="zs-tab-title"  style="left: 0px;">
+    <div class="zs-icon zs-tabs-control zs-icon-prev" layadmin-event="leftPage" @click="tabMoveLeft"></div>
+    <div class="zs-icon zs-tabs-control zs-icon-next" layadmin-event="rightPage"  @click="tabMoveRight"></div>
+    <div class="zs-tab" ref="tab">
+      <ul class="zs-tab-title"  ref="tabUl" :style="'left: '+offsetLeft+'px;'">
         <template  v-for="(item,index) in dataList" >
           <li :class="{'zs-this':item.isSelect}" @click ="clickItem(item,index)">
             <span>{{item.name}}</span>
@@ -15,88 +15,63 @@
   </div>
 </template>
 <script>
+  import { mapMutations, mapState } from 'vuex'
   export default {
     name: "zs-navTab",
-    props: {
-      dataList: {
-        type: Array,
-        default:()=>{
-          [];
-        }
-      },
-      newItem:{
-        type:Object,
-        default:()=>{
-          return null;
-        }
-      }
-    },
     data(){
       return{
-        activeIndex:-1,
-        offsetTop:'',
-        mouseType:'1'
+        offsetLeft:0,
+        tabWidth:0,
+        tabBoxWith:0,
       }
     },
     mounted(){
-
+      this.$nextTick(function(){
+          this.tabBoxWith = this.$refs.tab.clientWidth ;
+      });
     },
     methods:{
-      addItem(item){
-        let vm = this;
-        let isExist = false;
-        for(let i = 0 ;i<vm.dataList.length;i++){
-          let temp = this.dataList[i];
-          if(temp.name == item.name){
-            temp.isSelect = true;
-            isExist = true;
-          }else{
-            temp.isSelect = false;
-          }
-          vm.$set(vm.dataList, i, temp);
-        }
-        if(this.dataList.length==0||!isExist){
-          item.isSelect = true;
-          this.dataList.push(item)
-        }
-      },
       removeItem(item,index){
-        var vm = this;
-        if(item.isSelect){
-          var nextIndex = index-1;
-          if(nextIndex<0){
-             nextIndex =1 ;
-          }
-          var nextItem = vm.dataList[nextIndex];
-          if(nextItem){
-            this.setSelectItem(nextItem,nextIndex);
-            nextItem.isSelect = true;
-            vm.$set(vm.dataList, nextIndex, nextItem);
-            this.$emit('onItemSelect',nextItem);
-          }else{
-            this.$emit('onItemSelect');
-          }
-        }
-        this.dataList.splice(index,1);
+        this.remove({item:item,index:index});
       },
       clickItem(item,index){
-        this.setSelectItem(item,index);
+        this.setSelect({item:item,index:index});
       },
-      setSelectItem(item,index){
-        let vm = this;
-        for(let temp of vm.dataList){
-          temp.isSelect = false;
-        }
-        item.isSelect = true;
-        vm.$set(vm.dataList, index, item);
-        this.$emit('onItemSelect',item);
-      }
+      tabMoveLeft(){
+
+      },
+      tabMoveRight(){
+
+      },
+      tabMoveByItemChange(){
+        this.$nextTick(function(){
+          let $tabUL = this.$refs.tabUl;
+          let $childs = $tabUL.childNodes;
+          let childWidth = 0;
+          for(let i = $childs.length-1;i>=0;i-- ){
+              let $child = $childs[i];
+              childWidth += $child.offsetWidth;
+              if(childWidth>this.tabBoxWith){
+                this.offsetLeft = -$child.offsetLeft-$child.offsetWidth;
+                break;
+              }else{
+                this.offsetLeft = 0;
+              }
+          }
+        });
+      },
+      ...mapMutations(
+          {setSelect: 'SET_CUR_ITEM',remove: 'REMOVE_NAV_ITEM'}
+      )
     },
-    computed:{
+    computed: {
+      ...mapState({
+        dataList: state => state.navList,
+      }),
     },
-    watch: {
-      newItem(newVal, oldVal){
-        this.addItem(newVal);
+    watch:{
+      dataList(newVal,oldVal){
+          this.tabMoveByItemChange()
       }
     }
   }
@@ -105,7 +80,7 @@
   .zs-pagetabs {
     height: 40px;
     line-height: 40px;
-    padding: 0 80px 0 40px;
+    padding: 0 620px 0 40px;
     background-color: #fff;
     box-sizing: border-box;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
@@ -124,7 +99,7 @@
       }
     }
     .zs-icon-next {
-      right: 40px;
+      right: 580px;
       &:before{
         content: "\e65b";
       }
