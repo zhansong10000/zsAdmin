@@ -17,6 +17,7 @@ const mutations = {
       let temp = state.navList[i];
       if (temp.name == item.name) {
         temp.isSelect = true;
+        state.curItem = temp;
         isExist = true;
       } else {
         temp.isSelect = false;
@@ -25,6 +26,7 @@ const mutations = {
     }
     if (state.navList.length == 0 || !isExist) {
       item.isSelect = true;
+      state.curItem = item;
       state.navList.push(item);
     }
   },

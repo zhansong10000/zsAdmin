@@ -21,8 +21,8 @@
     data(){
       return{
         offsetLeft:0,
-        tabWidth:0,
         tabBoxWith:0,
+        len:0
       }
     },
     mounted(){
@@ -38,12 +38,41 @@
         this.setSelect({item:item,index:index});
       },
       tabMoveLeft(){
-
+        if(this.offsetLeft == 0)return;
+        let $tabUL = this.$refs.tabUl;
+        let $childs = $tabUL.childNodes;
+        let childWidth = 0;
+        for(let i = $childs.length-1;i>=0;i-- ){
+          let $child = $childs[i];
+          if($child.offsetLeft+this.offsetLeft<0){
+            childWidth += $child.offsetWidth;
+            if(childWidth>this.tabBoxWith){
+              this.offsetLeft = -$child.offsetLeft-$child.offsetWidth;
+              break;
+            }
+          }
+        }
+        if(childWidth<=this.tabBoxWith){
+          this.offsetLeft = 0;
+        }
       },
       tabMoveRight(){
-
+        let $tabUL = this.$refs.tabUl;
+        let $childs = $tabUL.childNodes;
+        let childWidth = 0;
+        let leftPreChild ;
+        for(let i = 0;i<$childs.length;i++ ){
+          let $child = $childs[i];
+          if($child.offsetLeft+this.offsetLeft>=0){
+            childWidth += $child.offsetWidth;
+            if(childWidth>this.tabBoxWith){
+                this.offsetLeft = -$child.offsetLeft;
+                break;
+            }
+          }
+        }
       },
-      tabMoveByItemChange(){
+      tabMoveByAddItem(){
         this.$nextTick(function(){
           let $tabUL = this.$refs.tabUl;
           let $childs = $tabUL.childNodes;
@@ -54,9 +83,61 @@
               if(childWidth>this.tabBoxWith){
                 this.offsetLeft = -$child.offsetLeft-$child.offsetWidth;
                 break;
-              }else{
-                this.offsetLeft = 0;
               }
+          }
+          if(childWidth<=this.tabBoxWith){
+            this.offsetLeft = 0;
+          }
+        });
+      },
+      tabMoveByRemoveItem(){
+        this.$nextTick(function(){
+          if(this.offsetLeft == 0)return;
+          let $tabUL = this.$refs.tabUl;
+          let $childs = $tabUL.childNodes;
+          let childWidth = 0;
+          let leftPreChild ;
+          for(let i = 0;i<$childs.length;i++ ){
+            let $child = $childs[i];
+            if($child.offsetLeft+this.offsetLeft>=0){
+              childWidth += $child.offsetWidth;
+            }else{
+              leftPreChild = $child;
+            }
+          }
+          if(childWidth<this.tabBoxWith){
+            if(leftPreChild){
+              this.offsetLeft = -leftPreChild.offsetLeft;
+            }
+          }
+        });
+      },
+      tabMoveByCurItem(){
+        this.$nextTick(function(){
+          let $tabUL = this.$refs.tabUl;
+          let $childs = $tabUL.childNodes;
+          let curChild;
+          let curIndex = 0;
+          for(let i = 0;i<$childs.length;i++ ){
+            let $child = $childs[i];
+            if($child.className == "zs-this"){
+              curIndex = i;
+              curChild = $child;
+              break;
+            }
+          }
+          if(curChild.offsetLeft+this.offsetLeft<0){
+            this.offsetLeft = -curChild.offsetLeft;
+          }else if(curChild.offsetLeft+curChild.offsetWidth+this.offsetLeft>this.tabBoxWith){
+            let childWidth = 0;
+            for(let i = curIndex;i>=0;i-- ){
+              let $child = $childs[i];
+              childWidth += $child.offsetWidth;
+              if(childWidth>this.tabBoxWith){
+                this.offsetLeft = -$child.offsetLeft-$child.offsetWidth;
+                break;
+              }
+            }
           }
         });
       },
@@ -66,12 +147,20 @@
     },
     computed: {
       ...mapState({
-        dataList: state => state.navList,
+         dataList: state => state.navList
       }),
     },
     watch:{
       dataList(newVal,oldVal){
-          this.tabMoveByItemChange()
+        var length = newVal.length;
+        if(length>this.len){
+          this.tabMoveByAddItem();
+        }else if(length == this.len){
+          this.tabMoveByCurItem();
+        }else{
+          this.tabMoveByRemoveItem();
+        }
+        this.len = length;
       }
     }
   }
@@ -80,7 +169,7 @@
   .zs-pagetabs {
     height: 40px;
     line-height: 40px;
-    padding: 0 620px 0 40px;
+    padding: 0 80px 0 40px;
     background-color: #fff;
     box-sizing: border-box;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
@@ -99,7 +188,7 @@
       }
     }
     .zs-icon-next {
-      right: 580px;
+      right: 40px;
       &:before{
         content: "\e65b";
       }

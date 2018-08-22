@@ -9,12 +9,12 @@
             </a>
             <dl class="zs-nav-child">
               <dd  v-for="(child,childIndex) in item.children" :class="{'zs-this':activeIndex== index+'-'+childIndex}">
-                <a href="javascript:void(0);" @click="onItemChildClick(child,index,childIndex)">{{child.name}}</a>
+                <a href="javascript:void(0);" @click="onItemChildClick(child)">{{child.name}}</a>
               </dd>
             </dl>
           </li>
           <li v-else class="zs-nav-item" :class="{'zs-this':activeIndex== index+'-0'}"  @mouseenter="onMouseEnter('1',$event)">
-            <a  href="javascript:void(0);" @click="onItemChildClick(item,index,0)">{{item.name}}
+            <a  href="javascript:void(0);" @click="onItemChildClick(item)">{{item.name}}
             </a>
           </li>
         </template>
@@ -45,10 +45,6 @@
       }
     },
     mounted(){
-     /* for(let item of this.navList){
-        item.isCur = true;
-        this.dataList.push(item);
-      }*/
     },
     methods:{
       onItemClick(item,index){
@@ -60,9 +56,7 @@
         }
         vm.$set(vm.dataList, index, item);
       },
-      onItemChildClick(item,index,childIndex){
-        this.activeIndex = index+'-'+childIndex;
-        this.$router.push(item.href);
+      onItemChildClick(item){
         this.add(item);
       },
       onMouseEnter(mouseType, event){
