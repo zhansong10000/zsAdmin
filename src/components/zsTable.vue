@@ -22,22 +22,24 @@
     <div class="zs-table-footer-wrapper">
       <div v-if="total!=0" class="zs-table-pagination">
         <span class="zs-table-pagination-total">共<em>{{toalPage}}</em>页 共<em>{{total}}</em>条记录</span>
-        <select class="zs-table-pagination-select"  v-model="size" @change="setPageSize()"><option v-for="item of sizeArr" :value="item">{{item}}</option></select>
-        <a href="javascript:void(0);" v-show="current != 1"  @click="setCurrent(1)">首页</a>
-        <a href="javascript:void(0);" :disabled="current == 1"  @click="setCurrent(current - 1)">上一页</a>
-        <template  v-for="p in groupList">
+        <select class="zs-table-pagination-select" v-model="size" @change="setPageSize()">
+          <option v-for="item of sizeArr" :value="item">{{item}}</option>
+        </select>
+        <a href="javascript:void(0);" v-show="current != 1" @click="setCurrent(1)">首页</a>
+        <a href="javascript:void(0);" :disabled="current == 1" @click="setCurrent(current - 1)">上一页</a>
+        <template v-for="p in groupList">
           <template v-if="p.val&&p.val==current">
             <span :class="{'active': current == p.val}"><em class="page-em"></em><em>{{p.text}}</em></span>
           </template>
           <template v-else-if="p.val">
-            <a  href="javascript:void(0);" @click="setCurrent(p.val)">{{p.text}}</a>
+            <a href="javascript:void(0);" @click="setCurrent(p.val)">{{p.text}}</a>
           </template>
           <template v-else>
             <span>{{p.text}}</span>
           </template>
-        </template >
-        <a href="javascript:void(0);"  :disabled="current == toalPage"   @click="setCurrent(current + 1)">下一页</a>
-        <a href="javascript:void(0);"  v-show="current != toalPage"  @click="setCurrent(toalPage)">尾页</a>
+        </template>
+        <a href="javascript:void(0);" :disabled="current == toalPage" @click="setCurrent(current + 1)">下一页</a>
+        <a href="javascript:void(0);" v-show="current != toalPage" @click="setCurrent(toalPage)">尾页</a>
       </div>
       <div style="clear:both;"></div>
     </div>
@@ -55,27 +57,27 @@
     },
     data() {
       return {
-        size:this.pageSize,
+        size: this.pageSize,
         current: 1   // 当前的页数
       }
     },
     props: {
       dataList: {
         type: Array,
-        default:()=>{
+        default: () => {
           [];
         }
       },
       columnModel: {
         type: Array,
-        default: function() {
+        default: function () {
           return [];
         }
       },
       sizeArr: {// 数据总条数
         type: Array,
-        default: function() {
-          return [10,15,20,30];
+        default: function () {
+          return [10, 15, 20, 30];
         }
       },
       total: {// 数据总条数
@@ -92,14 +94,14 @@
       }
     },
     methods: {
-      setPageSize(){
+      setPageSize() {
         this.current = 1;
-        this.$emit('pageChange',{"page": this.current,"pageSize":this.size});
+        this.$emit('pageChange', {"page": this.current, "pageSize": this.size});
       },
-      setCurrent (page) {
+      setCurrent(page) {
         if (this.current != page && page > 0 && page < this.toalPage + 1) {
           this.current = page;
-          this.$emit('pageChange',{"page": this.current,"pageSize":this.size});
+          this.$emit('pageChange', {"page": this.current, "pageSize": this.size});
         }
       },
       calColumnWidth() {
@@ -126,7 +128,7 @@
       toalPage() { // 总页数
         return Math.ceil(this.total / this.size);
       },
-      groupList () { // 获取分页页码
+      groupList() { // 获取分页页码
         var len = this.toalPage, list = new Array();
         if (len <= 8) {
           for (var i = 1; i <= len; i++) {
@@ -142,14 +144,14 @@
             list.push({text: 1, val: 1}, {text: 2, val: 2}, {text: "..."});
             var begin = this.current - 2;
             var end = this.current + 2;
-            if (end >len) {
+            if (end > len) {
               end = len;
               begin = end - 4;
               if (this.current - begin < 2) {
                 begin = begin - 1;
               }
             } else if (end + 1 == len) {
-              end =len;
+              end = len;
             }
             for (var i = begin; i <= end; i++) {
               list.push({text: i, val: i});
@@ -165,21 +167,21 @@
   }
 </script>
 
-<style lang="scss"  scoped>
-  .zs-table table{
+<style lang="scss" scoped>
+  .zs-table table {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
     background-color: #fff;
   }
 
-  .zs-table-header-wrapper{
-    .zs-table-header{
-      tr{
+  .zs-table-header-wrapper {
+    .zs-table-header {
+      tr {
         background-color: #f2f2f2;
         transition: all .3s;
         -webkit-transition: all .3s;
-        th{
+        th {
           text-align: center;
           word-break: break-all;
           padding: 9px 5px;
@@ -192,12 +194,13 @@
       }
     }
   }
+
   .zs-table-body-wrapper {
     .zs-table-body {
       tr {
         transition: all .3s;
         -webkit-transition: all .3s;
-        &:hover{
+        &:hover {
           background-color: #f8f8f8;
         }
         td {
@@ -211,18 +214,19 @@
       }
     }
   }
-  .zs-table-footer-wrapper{
+
+  .zs-table-footer-wrapper {
     width: 100%;
     text-align: right;
-    .zs-table-pagination{
+    .zs-table-pagination {
       display: inline-block;
       vertical-align: middle;
       margin: 10px 0;
       font-size: 0;
-      -webkit-box-sizing: content-box!important;
-      -moz-box-sizing: content-box!important;
-      box-sizing: content-box!important;
-      a,span{
+      -webkit-box-sizing: content-box !important;
+      -moz-box-sizing: content-box !important;
+      box-sizing: content-box !important;
+      a, span {
         display: inline-block;
         vertical-align: middle;
         padding: 0 15px;
@@ -260,12 +264,12 @@
         top: 3px;
       }
 
-      a{
+      a {
         text-decoration: none;
       }
-      .active{
+      .active {
         position: relative;
-        .page-em{
+        .page-em {
           position: absolute;
           left: -1px;
           top: -1px;
@@ -274,14 +278,14 @@
           height: 100%;
           background-color: #009688;
         }
-        em{
+        em {
           position: relative;
           color: #fff;
           font-weight: 400;
           font-style: normal;
         }
       }
-      span{
+      span {
         color: #999;
         font-weight: 700;
       }

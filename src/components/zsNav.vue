@@ -60,8 +60,8 @@
         this.add(item);
       },
       onMouseEnter(mouseType, event){
-          this.mouseType = mouseType;
-          this.offsetTop = event.currentTarget.offsetTop +'px';
+        this.mouseType = mouseType;
+        this.offsetTop = event.currentTarget.offsetTop +'px';
       },
       onMouseLeave(event){
         this.navBarStyle ='top: '+this.offsetTop+';height:0px; opacity: 0;transition:all 0.5s';
@@ -110,7 +110,7 @@
       },
       offsetTop( newVal, oldVal){
         if(newVal ==-1){
-            return;
+          return;
         }
         if(this.mouseType=="1"){
           this.navBarStyle = 'top: '+newVal+'; height: 45px; opacity: 1;';

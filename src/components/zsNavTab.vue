@@ -2,7 +2,8 @@
   <div class="zs-pagetabs">
     <div class="zs-icon zs-tabs-control zs-icon-prev" layadmin-event="leftPage" @click="tabMoveLeft"></div>
     <div class="zs-icon zs-tabs-control zs-icon-next" layadmin-event="rightPage" @click="tabMoveRight"></div>
-    <div class="zs-icon zs-tabs-control zs-icon-down"  @mouseleave="showClosePanl=false"  @mouseenter="showClosePanl=true">
+    <div class="zs-icon zs-tabs-control zs-icon-down" @mouseleave="showClosePanl=false"
+         @mouseenter="showClosePanl=true">
       <ul class="zs-nav zs-tabs-select">
         <li class="layui-nav-item">
           <dl class="zs-nav-child zs-anim-fadein zs-anim zs-anim-upbit" :class="{'zs-show':showClosePanl}">
@@ -35,7 +36,7 @@
         offsetLeft: 0,
         tabBoxWith: 0,
         len: 0,
-        showClosePanl:false,
+        showClosePanl: false,
       }
     },
     mounted() {
@@ -50,20 +51,20 @@
       clickItem(item, index) {
         this.setSelect({item: item, index: index});
       },
-      closeCur(){
+      closeCur() {
         this.showClosePanl = false;
-        for(let  i=0;i<this.dataList.length;i++){
+        for (let i = 0; i < this.dataList.length; i++) {
           let item = this.dataList[i];
-          if(item.isSelect){
+          if (item.isSelect) {
             this.remove({item: this.dataList[i], index: i});
           }
         }
       },
-      closeOther(){
+      closeOther() {
         this.showClosePanl = false;
         this.removeOther();
       },
-      closeAll(){
+      closeAll() {
         this.showClosePanl = false;
         this.removeAll();
       },
@@ -172,7 +173,12 @@
         });
       },
       ...mapMutations(
-        {setSelect: 'SET_CUR_ITEM', remove: 'REMOVE_NAV_ITEM',removeOther:'REMOVE_OTHER_ITEM',removeAll:'REMOVE_ALL_ITEM'}
+        {
+          setSelect: 'SET_CUR_ITEM',
+          remove: 'REMOVE_NAV_ITEM',
+          removeOther: 'REMOVE_OTHER_ITEM',
+          removeAll: 'REMOVE_ALL_ITEM'
+        }
       )
     },
     computed: {
@@ -257,7 +263,7 @@
               padding: 0 20px;
               transition: all .3s;
               -webkit-transition: all .3s;
-              &:hover{
+              &:hover {
                 background-color: #f2f2f2;
                 color: #000;
               }
@@ -268,7 +274,7 @@
       &:before {
         content: "\e61a";
       }
-      &:hover{
+      &:hover {
         background-color: #f6f6f6;
       }
     }
@@ -354,6 +360,7 @@
       }
     }
   }
+
   .zs-tab {
     text-align: left !important;
   }
