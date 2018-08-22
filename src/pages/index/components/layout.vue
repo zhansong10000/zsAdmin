@@ -149,7 +149,7 @@
     position: absolute;
     top: 40px;
     left: 220px;
-    width: 100%;
+    right:0;
     div {
       width: 100%;
       font-size: 40px;
