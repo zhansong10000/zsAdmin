@@ -101,7 +101,7 @@
     },
     computed:{
       ...mapState({
-        curItem: state => state.curItem,
+        curItem: state => state.nav.curItem,
       })
     },
     watch: {
