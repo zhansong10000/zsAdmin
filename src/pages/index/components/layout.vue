@@ -10,8 +10,8 @@
 <script>
   // 导入样式
   import '@/assets/css/zsui.css';
-  import zsNav from '@/components/zsNav';
-  import zsNavTab from '@/components/zsNavTab';
+  import zsNav from '@/components/layout/zsNav';
+  import zsNavTab from '@/components/layout/zsNavTab';
 
   export default {
     name: 'App',
@@ -152,8 +152,6 @@
     right:0;
     div {
       width: 100%;
-      font-size: 40px;
-      text-align: center;
     }
   }
 </style>

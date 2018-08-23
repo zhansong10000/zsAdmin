@@ -5,10 +5,12 @@ import App from './App'
 import store from '@/store'
 import router from './router'
 import http from '@/http'
+import zsui  from  '@/components/zsui/src';
 
 //开启debug模式
 Vue.config.productionTip = false
 Vue.use(http);
+Vue.use(zsui);
 new Vue({
   el: '#app',
   router,

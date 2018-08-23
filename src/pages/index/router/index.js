@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '../components/layout.vue';
 
+import A from '../views/PageDialog.vue';
 Vue.use(Router);
-const A = { template: '<div>A    <router-link to="/a1">Go to Foo</router-link></div>' };
 const B = { template: '<div>B</div>' };
 const C = { template: '<div>C</div>' };
 const D = { template: '<div>D</div>' };

@@ -30,7 +30,7 @@
   import {mapMutations, mapState} from 'vuex'
 
   export default {
-    name: "zs-navTab",
+    name: "zs-nav-tab",
     data() {
       return {
         offsetLeft: 0,
