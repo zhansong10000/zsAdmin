@@ -4,31 +4,27 @@
     <transition
       enter-to-class="show-layer-fadeIn"
       leave-to-class="hide-layer-fadeIn">
-      <div v-if="showDialog" class="zs-layer zs-layer-dialog" :style="dialogStyle">
-        <div class="zs-layer-title" :class="{'cursorMove':moveDialog}" v-move="moveDialog">页面层</div>
-        <div class="zs-layer-content" :style="'height:'+contentHeight+'px;padding: 10px;'">
-          <slot name="content">
-
-          </slot>
+      <div v-if="showDialog" class="zs-layer zs-layer-dialog show-layer-fadeIn"
+           :class="{'hide-layer-fadeIn':showHideClass}" :style="dialogStyle">
+        <div class="zs-layer-title" :class="{'cursorMove':moveDialog}" v-move="moveDialog">{{title}}</div>
+        <div class="zs-layer-content">
+          {{message}}
         </div>
         <span class="zs-layer-setwin">
         <a class="zs-icon zs-icon-close" href="javascript:void(0);" @click.stop="close"></a>
       </span>
-        <div class="zs-layer-btn" v-if="showBtn">
-          <slot name="button">
-
-          </slot>
+        <div class="zs-layer-btn">
+          <a class="zs-btn  zs-btn-normal zs-btn-sm" @click="handleAction('confirm')">{{confirmButtonText}}</a>
+          <a class="zs-btn  zs-btn-primary zs-btn-sm" v-if="showCancelButton" @click="handleAction('cancel')">{{cancelButtonText}}</a>
         </div>
         <span class="zs-layer-resize"></span>
       </div>
     </transition>
   </div>
-
 </template>
 <script>
   export default {
-    name: "zs-dialog",
-
+    name: "zs-Message",
     mounted() {
       var that = this;
       this.$nextTick(() => {
@@ -37,32 +33,22 @@
     },
     data() {
       return {
+        showDialog: false,
+        moveDialog: true,
+        showHideClass: false,
         shadeStyle: "",
         dialogStyle: "",
-        contentHeight: 0,
-        showBtn: true
+        height: 154,
+        width: 260,
+        title: '',
+        message: '',
+        confirmButtonText: '',
+        cancelButtonText: '',
+        showCancelButton: false,
+        callback: null
       }
     },
-    props: {
-      showDialog: {
-        type: Boolean,
-        default: false
-      },
-      //宽
-      width: {
-        type: Number,
-        default: 700
-      },
-      //高
-      height: {
-        type: Number,
-        default: 500
-      },
-      moveDialog: {
-        type: Boolean,
-        default: false
-      },
-    },
+    props: {},
     directives: {
       move: {
         // 指令的定义
@@ -71,19 +57,13 @@
           let oDiv = el.parentNode;   //当前元素
           let self = this;  //上下文
           el.onmousedown = function (e) {
-
-            //鼠标按下，计算当前元素距离可视区的距离
             let disX = e.clientX - oDiv.offsetLeft;
             let disY = e.clientY - oDiv.offsetTop;
             document.onmousemove = function (e) {
-              //通过事件委托，计算移动的距离
               let l = e.clientX - disX;
               let t = e.clientY - disY;
-              //移动当前元素
               oDiv.style.left = l + 'px';
               oDiv.style.top = t + 'px';
-              //将此时的位置传出去
-              // binding.value({x:e.pageX,y:e.pageY})
             };
             document.onmouseup = function (e) {
               document.onmousemove = null;
@@ -108,16 +88,19 @@
         dialogStyleArray.push("top:", top, "px;");
         dialogStyleArray.push("left:", left, "px;");
         this.dialogStyle = dialogStyleArray.join('');
-        if (this.$slots && this.$slots.button) {
-          this.showBtn = true;
-          this.contentHeight = this.height - 115;
-        } else {
-          this.showBtn = false;
-          this.contentHeight = this.height - 65;
-        }
       },
       close() {
-        this.$emit('close', false);
+        this.showDialog = false
+      },
+      handleAction(action) {
+        var callback = this.callback;
+        this.showDialog = false
+        callback(action);
+      }
+    },
+    watch: {
+      showDialog(val) {
+        this.showHideClass = !val;
       }
     }
   }
@@ -168,7 +151,14 @@
     }
     .zs-layer-content {
       position: relative;
-      overflow: auto;
+      padding: 20px;
+      line-height: 24px;
+      word-break: break-all;
+      overflow: hidden;
+      font-size: 14px;
+      color: #666;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
     .zs-layer-setwin {
       position: absolute;
@@ -195,7 +185,7 @@
       height: 45px;
       line-height: 45px;
       vertical-align: middle;
-      padding: 5px 15px 5px;
+      padding: 0 20px 20px;
       pointer-events: auto;
       user-select: none;
       -webkit-user-select: none;
@@ -209,6 +199,5 @@
       cursor: se-resize;
     }
   }
-
 
 </style>

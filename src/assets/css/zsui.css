@@ -270,3 +270,551 @@ a cite {
 .zs-btn-fluid {
   width: 100%
 }
+
+
+@keyframes slideFromTop {
+  0% {
+    top: 0
+  }
+  100% {
+    top: 50%
+  }
+}
+
+@-webkit-keyframes slideFromTop {
+  0% {
+    top: 0
+  }
+  100% {
+    top: 50%
+  }
+}
+
+
+@keyframes hideFromTop {
+  0% {
+    top: 50%
+  }
+  100% {
+    top: 0;
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes hideFromTop {
+  0% {
+    top: 50%
+  }
+  100% {
+    top: 0;
+    opacity: 0
+  }
+}
+
+
+@keyframes slideFromBottom {
+  0% {
+    top: 80%
+  }
+  100% {
+    top: 50%
+  }
+}
+
+@-webkit-keyframes slideFromBottom {
+  0% {
+    top: 80%
+  }
+  100% {
+    top: 50%
+  }
+}
+
+
+
+@keyframes hideFromBottom {
+  0% {
+    top: 50%
+  }
+  100% {
+    top: 80%;
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes hideFromBottom {
+  0% {
+    top: 50%
+  }
+  100% {
+    top: 80%;
+    opacity: 0
+  }
+}
+
+
+@keyframes showSweetAlert {
+  0% {
+    transform: scale(0.5)
+  }
+  45% {
+    transform: scale(1.05)
+  }
+  80% {
+    transform: scale(.95)
+  }
+  100% {
+    transform: scale(1)
+  }
+}
+
+@-webkit-keyframes showSweetAlert {
+  0% {
+    -webkit-transform: scale(0.5)
+  }
+  45% {
+    -webkit-transform: scale(1.05)
+  }
+  80% {
+    -webkit-transform: scale(.95)
+  }
+  100% {
+    -webkit-transform: scale(1)
+  }
+}
+
+
+@keyframes hideSweetAlert {
+  0% {
+    transform: scale(1)
+  }
+  45% {
+    transform: scale(1.05)
+  }
+  80% {
+    transform: scale(.95)
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes hideSweetAlert {
+  0% {
+    -webkit-transform: scale(1)
+  }
+  45% {
+    -webkit-transform: scale(1.05)
+  }
+  80% {
+    -webkit-transform: scale(.95)
+  }
+  100% {
+    -webkit-transform: scale(0);
+    opacity: 0
+  }
+}
+
+@keyframes layerFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(.5)
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1)
+  }
+}
+
+@-webkit-keyframes layerFadeIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(.5)
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1)
+  }
+}
+
+@keyframes hideFadeIn {
+  0% {
+    opacity: 1;
+    transform: scale(1)
+  }
+  100% {
+    transform: scale(.5);
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes hideFadeIn {
+  0% {
+    opacity: 1;
+    -webkit-transform: scale(1)
+  }
+  100% {
+    -webkit-transform: scale(.5);
+    opacity: 0
+  }
+}
+
+
+@keyframes layer-fadeInUpBig {
+  0% {
+    opacity: 0;
+    transform: translateY(2000px)
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+@-webkit-keyframes layer-fadeInUpBig {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(2000px);
+    transform: translateY(2000px)
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0)
+  }
+}
+
+@keyframes hide-fadeInUpBig {
+  0% {
+    opacity: 1;
+    transform: translateY(0)
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(2000px)
+  }
+}
+
+@-webkit-keyframes hide-fadeInUpBig {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    transform: translateY(0)
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateY(2000px);
+    transform: translateY(2000px)
+  }
+}
+
+@keyframes layer-rollIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%) rotate(-120deg)
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0)
+  }
+}
+
+@-webkit-keyframes layer-rollIn {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100%) rotate(-120deg);
+    transform: translateX(-100%) rotate(-120deg)
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateX(0) rotate(0);
+    transform: translateX(0) rotate(0)
+  }
+}
+
+
+@keyframes hide-rollIn {
+  0% {
+    opacity: 1;
+    transform: translateX(0) rotate(0)
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100%) rotate(-120deg)
+  }
+}
+
+@-webkit-keyframes hide-rollIn {
+  0% {
+    opacity: 1;
+    -webkit-transform: translateX(0) rotate(0);
+    transform: translateX(0) rotate(0)
+  }
+  100% {
+    opacity: 0;
+    -webkit-transform: translateX(-100%) rotate(-120deg);
+    transform: translateX(-100%) rotate(-120deg)
+  }
+}
+
+
+@keyframes layer-fadeIn {
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
+  }
+}
+
+@-webkit-keyframes layer-fadeIn {
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
+  }
+}
+
+
+@keyframes hide-fadeIn {
+  0% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes hide-fadeIn {
+  0% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0
+  }
+}
+
+@-ms-keyframes hide-fadeIn {
+  0% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0;
+    filter: Alpha(opacity=0)
+  }
+}
+
+@keyframes layer-shake {
+  0%, 100% {
+    transform: translateX(0)
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px)
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px)
+  }
+}
+
+@-webkit-keyframes layer-shake {
+  0%, 100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0)
+  }
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px)
+  }
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px)
+  }
+}
+
+@keyframes hide-shake {
+  0%, 100% {
+    transform: translateX(10px)
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px)
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(0)
+  }
+  100% {
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes hide-shake {
+  0%, 100% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px)
+  }
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px)
+  }
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0)
+  }
+  100% {
+    opacity: 0
+  }
+}
+
+
+@keyframes layer-spread {
+  0% {
+    transform: scaleX(0);
+    opacity: 0
+  }
+  100% {
+    transform: scaleX(1);
+    opacity: 1
+  }
+}
+
+@-webkit-keyframes layer-spread {
+  0% {
+    -webkit-transform: scaleX(0);
+    opacity: 0
+  }
+  100% {
+    -webkit-transform: scaleX(1);
+    opacity: 1
+  }
+}
+
+
+@keyframes hide-spread {
+  0% {
+    transform: scaleX(1)
+  }
+  50% {
+    transform: scaleX(.5)
+  }
+  100% {
+    transformX: scaleX(0);
+    opacity: 0
+  }
+}
+
+@-webkit-keyframes hide-spread {
+  0% {
+    -webkit-transform: scaleX(1)
+  }
+  50% {
+    -webkit-transform: scaleX(.5)
+  }
+  100% {
+    -webkit-transform: scaleX(0);
+    opacity: 0
+  }
+}
+
+/* 中间扩散渐入*/
+.show-layer-fadeIn {
+  animation: layerFadeIn .5s;
+  -webkit-animation: layerFadeIn .5s;
+}
+/* 中间扩散*/
+.show-sweet-alert {
+  animation: showSweetAlert .3s;
+  -webkit-animation: showSweetAlert .3s;
+}
+
+/* 无动画*/
+.show-alert{
+  animation: none;
+  -webkit-animation: none;
+}
+
+/* 从上滑落*/
+.show-slide-from-top{
+  animation: slideFromTop .3s;
+  -webkit-animation: slideFromTop .3s;
+}
+
+/* 从下划入*/
+.show-slide-from-bottom{
+  animation: slideFromBottom .2s;
+  -webkit-animation: slideFromBottom .2s;
+}
+
+/*从下方平滑进入*/
+.show-fadeIn-upBig{
+  animation: layer-fadeInUpBig .2s;
+  -webkit-animation: layer-fadeInUpBig .2s;
+}
+
+/*翻转*/
+.show-layer-rollIn {
+  animation: layer-rollIn .3s;
+  -webkit-animation: layer-rollIn .3s;
+}
+
+
+/*晃动*/
+.show-layer-shake{
+  animation: layer-shake .3s;
+  -webkit-animation: layer-shake .3s;
+}
+/*左右伸缩*/
+.show-layer-spread{
+  animation: layer-spread .2s;
+  -webkit-animation: layer-spread .2s;
+}
+
+/*隐藏左右伸缩*/
+.hide-layer-spread{
+  animation: hide-spread .5s forwards;
+  -webkit-animation: hide-spread .5s forwards;
+}
+
+/* 隐藏从上滑落*/
+.hide-slide-from-top{
+  animation: hideFromTop .2s forwards;
+  -webkit-animation: hideFromTop .2s forwards;
+}
+
+/* 隐藏从下划入*/
+.hide-slide-from-bottom{
+  animation: hideFromBottom .2s forwards;
+  -webkit-animation: hideFromBottom .2s forwards;
+}
+
+/* 隐藏中间扩散*/
+.hide-sweet-alert {
+  animation: hideSweetAlert .2s forwards;
+  -webkit-animation: hideSweetAlert .2s forwards;
+}
+
+/* 隐藏中间扩散渐入*/
+.hide-layer-fadeIn {
+  animation: hideFadeIn .2s forwards;
+  -webkit-animation: hideFadeIn .2s forwards;
+}
+
+
+.hideAlert[data-animation=layer-fadeInUpBig] {
+  animation: hide-fadeInUpBig .2s forwards;
+  -webkit-animation: hide-fadeInUpBig .2s forwards;
+}
+
+/*隐藏翻转*/
+.hide-layer-rollIn {
+  animation: hide-rollIn .2s forwards;
+  -webkit-animation: hide-rollIn .2s forwards;
+}
+
+/*隐藏晃动*/
+.hide-layer-shake{
+  animation: hide-shake .2s forwards;
+  -webkit-animation: hide-shake .2s forwards;
+  -moz-animation: hide-shake .2s forwards;
+}
+

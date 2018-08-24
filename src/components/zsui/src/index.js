@@ -1,4 +1,5 @@
 import zsDialog from '../packages/zsDialog';
+import zsMessage from '../packages/zsMessage';
 import zsTable from '../packages/zsTable';
 
 const components = [
@@ -7,8 +8,11 @@ const components = [
 ]
 
 const install = function(Vue, opts = {}) {
+  if (install.installed) return;
   components.forEach(component => {
     Vue.component(component.name, component);
+    Vue.prototype.$alert = zsMessage.alert;
+    Vue.prototype.$confirm = zsMessage.confirm;
   });
 
  // Vue.prototype.$loading = Loading.service;
@@ -18,4 +22,9 @@ const install = function(Vue, opts = {}) {
 if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 }
-export default install
+export default install;
+export {
+  zsDialog,
+  zsMessage,
+  zsTable
+}

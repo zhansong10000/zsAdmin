@@ -7,6 +7,7 @@
 <script>
   // 导入样式
   import '@/assets/css/zsui.css';
+  import '@/assets/css/animate.css';
 // import '@/assets/css/layui.css';
   //import '@/assets/css/global.css';
 
