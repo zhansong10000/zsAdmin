@@ -1,25 +1,25 @@
 <template>
   <div class="zs-pagetabs">
-    <div class="zs-icon zs-tabs-control zs-icon-prev" layadmin-event="leftPage" @click="tabMoveLeft"></div>
-    <div class="zs-icon zs-tabs-control zs-icon-next" layadmin-event="rightPage" @click="tabMoveRight"></div>
-    <div class="zs-icon zs-tabs-control zs-icon-down" @mouseleave="showClosePanl=false"
-         @mouseenter="showClosePanl=true">
+    <div @click="tabMoveLeft" class="zs-icon zs-tabs-control zs-icon-prev" layadmin-event="leftPage"></div>
+    <div @click="tabMoveRight" class="zs-icon zs-tabs-control zs-icon-next" layadmin-event="rightPage"></div>
+    <div @mouseenter="showClosePanl=true" @mouseleave="showClosePanl=false"
+         class="zs-icon zs-tabs-control zs-icon-down">
       <ul class="zs-nav zs-tabs-select">
         <li class="layui-nav-item">
-          <dl class="zs-nav-child zs-anim-fadein zs-anim zs-anim-upbit" :class="{'zs-show':showClosePanl}">
-            <dd><a href="javascript:void(0);" @click="closeCur">关闭当前标签页</a></dd>
-            <dd><a href="javascript:void(0);" @click="closeOther">关闭其它标签页</a></dd>
-            <dd><a href="javascript:void(0);" @click="closeAll">关闭全部标签页</a></dd>
+          <dl :class="{'zs-show':showClosePanl}" class="zs-nav-child zs-anim-fadein zs-anim zs-anim-upbit">
+            <dd><a @click="closeCur" href="javascript:void(0);">关闭当前标签页</a></dd>
+            <dd><a @click="closeOther" href="javascript:void(0);">关闭其它标签页</a></dd>
+            <dd><a @click="closeAll" href="javascript:void(0);">关闭全部标签页</a></dd>
           </dl>
         </li>
       </ul>
     </div>
     <div class="zs-tab" ref="tab">
-      <ul class="zs-tab-title" ref="tabUl" :style="'left: '+offsetLeft+'px;'">
+      <ul :style="'left: '+offsetLeft+'px;'" class="zs-tab-title" ref="tabUl">
         <template v-for="(item,index) in dataList">
           <li :class="{'zs-this':item.isSelect}" @click="clickItem(item,index)">
             <span>{{item.name}}</span>
-            <i class="zs-icon zs-unselect zs-tab-close" @click.stop="removeItem(item,index)">&#x1006;</i>
+            <i @click.stop="removeItem(item,index)" class="zs-icon zs-unselect zs-tab-close">&#x1006;</i>
           </li>
         </template>
       </ul>
@@ -211,26 +211,34 @@
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
     transition: all .3s;
     position: fixed;
-    top: 0;
-    right: 0;
+    top: 76px;
+    right: 10px;
     z-index: 999;
-    left: 220px;
+    left: 240px;
+
     .zs-icon-prev {
       left: 0;
       border-left: none;
       border-right: 1px solid #f6f6f6;
+
       &:before {
         content: "\e65a";
+        color: #1bd0a1;
       }
     }
+
     .zs-icon-next {
       right: 40px;
+
       &:before {
         content: "\e65b";
+        color: #1bd0a1;
       }
     }
+
     .zs-icon-down {
       right: 0;
+
       .zs-tabs-select.zs-nav {
         position: absolute;
         left: 0;
@@ -239,6 +247,7 @@
         height: 100%;
         padding: 0;
         background: 0 0;
+
         .zs-nav-child {
           display: none;
           position: absolute;
@@ -255,14 +264,17 @@
           z-index: 100;
           border-radius: 2px;
           white-space: nowrap;
+
           dd {
             position: relative;
+
             a {
               color: #666;
               display: block;
               padding: 0 20px;
               transition: all .3s;
               -webkit-transition: all .3s;
+
               &:hover {
                 background-color: #f2f2f2;
                 color: #000;
@@ -271,13 +283,17 @@
           }
         }
       }
+
       &:before {
         content: "\e61a";
+        color: #1bd0a1;
       }
+
       &:hover {
         background-color: #f6f6f6;
       }
     }
+
     .zs-tabs-control {
       position: absolute;
       top: 0;
@@ -290,30 +306,37 @@
       box-sizing: border-box;
       border-left: 1px solid #f6f6f6;
     }
+
     .zs-tab {
       margin: 0;
       overflow: hidden;
       text-align: left !important;
     }
+
     .zs-tab-title {
       height: 40px;
       border: none;
+
       .zs-this {
         color: #000;
         background-color: #f6f6f6;
+
         &:after {
           width: 100%;
           border: none;
           height: 2px;
-          background-color: #292B34;
+          background-color: #1bd0a1;
         }
+
         &:hover {
           background-color: #f6f6f6;
+
           &:after {
             width: 100%;
           }
         }
       }
+
       li {
         min-width: 0;
         line-height: 40px;
@@ -324,6 +347,7 @@
         color: #666;
         border-right: 1px solid #f6f6f6;
         vertical-align: top;
+
         .zs-tab-close {
           position: absolute;
           right: 8px;
@@ -334,17 +358,21 @@
           line-height: 16px;
           border-radius: 50%;
           font-size: 12px;
+
           &:hover {
             background-color: #FF5722;
             color: #fff;
           }
         }
+
         &:hover {
           background-color: #f6f6f6;
+
           &:after {
             width: 100%;
           }
         }
+
         &:after {
           content: '';
           position: absolute;
@@ -353,7 +381,7 @@
           width: 0;
           height: 2px;
           border-radius: 0;
-          background-color: #292B34;
+          background-color: #1bd0a1;
           transition: all .3s;
           -webkit-transition: all .3s;
         }
@@ -375,6 +403,7 @@
     border-bottom-style: solid;
     transition: all .2s;
     -webkit-transition: all .2s;
+
     li {
       display: inline-block;
       vertical-align: middle;

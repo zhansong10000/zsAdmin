@@ -1,9 +1,12 @@
 <template>
-  <div class="layui-layout layui-layout-admin">
-    <zs-nav :dataList="navList"></zs-nav>
-    <zs-navTab></zs-navTab>
-    <div class="zs-body">
-      <router-view/>
+  <div class="main">
+    <div class="main-top"></div>
+    <div class="main-content">
+      <zs-nav :dataList="navList"></zs-nav>
+      <zs-navTab></zs-navTab>
+      <div class="content">
+        <router-view/>
+      </div>
     </div>
   </div>
 </template>
@@ -145,13 +148,39 @@
   }
 </script>
 <style lang="scss" scoped>
-  .zs-body {
-    position: absolute;
-    top: 40px;
-    left: 220px;
-    right:0;
-    div {
+  .main {
+    width: 100%;
+    position: relative;
+    background: #f4f4f4;
+
+    .main-top {
       width: 100%;
+      height: 66px;
+      background: #00ceab;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+    }
+
+    .main-content {
+      width: 100%;
+      padding: 0 10px;
+      position: fixed;
+      top: 76px;
+      left: 0;
+      bottom: 10px;
+    }
+
+    .content {
+      position: relative;
+      width: calc(100% - 250px);
+      margin-top: 41px;
+      margin-left :229px;
+      height: calc(100% - 40px);
+      border: 1px solid #d8dde3;
+      border-top:none;
+      background: #fff;
     }
   }
 </style>
