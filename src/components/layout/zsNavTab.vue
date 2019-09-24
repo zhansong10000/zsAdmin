@@ -1,15 +1,35 @@
 <template>
   <div class="zs-pagetabs">
-    <div @click="tabMoveLeft" class="zs-icon zs-tabs-control zs-icon-prev" layadmin-event="leftPage"></div>
-    <div @click="tabMoveRight" class="zs-icon zs-tabs-control zs-icon-next" layadmin-event="rightPage"></div>
-    <div @mouseenter="showClosePanl=true" @mouseleave="showClosePanl=false"
-         class="zs-icon zs-tabs-control zs-icon-down">
+    <div
+      @click="tabMoveLeft"
+      class="zs-icon zs-tabs-control zs-icon-prev"
+      layadmin-event="leftPage"
+    ></div>
+    <div
+      @click="tabMoveRight"
+      class="zs-icon zs-tabs-control zs-icon-next"
+      layadmin-event="rightPage"
+    ></div>
+    <div
+      @mouseenter="showClosePanl=true"
+      @mouseleave="showClosePanl=false"
+      class="zs-icon zs-tabs-control zs-icon-down"
+    >
       <ul class="zs-nav zs-tabs-select">
         <li class="layui-nav-item">
-          <dl :class="{'zs-show':showClosePanl}" class="zs-nav-child zs-anim-fadein zs-anim zs-anim-upbit">
-            <dd><a @click="closeCur" href="javascript:void(0);">关闭当前标签页</a></dd>
-            <dd><a @click="closeOther" href="javascript:void(0);">关闭其它标签页</a></dd>
-            <dd><a @click="closeAll" href="javascript:void(0);">关闭全部标签页</a></dd>
+          <dl
+            :class="{'zs-show':showClosePanl}"
+            class="zs-nav-child zs-anim-fadein zs-anim zs-anim-upbit"
+          >
+            <dd>
+              <a @click="closeCur" href="javascript:void(0);">关闭当前标签页</a>
+            </dd>
+            <dd>
+              <a @click="closeOther" href="javascript:void(0);">关闭其它标签页</a>
+            </dd>
+            <dd>
+              <a @click="closeAll" href="javascript:void(0);">关闭全部标签页</a>
+            </dd>
           </dl>
         </li>
       </ul>
@@ -19,7 +39,10 @@
         <template v-for="(item,index) in dataList">
           <li :class="{'zs-this':item.isSelect}" @click="clickItem(item,index)">
             <span>{{item.name}}</span>
-            <i @click.stop="removeItem(item,index)" class="zs-icon zs-unselect zs-tab-close">&#x1006;</i>
+            <i
+              @click.stop="removeItem(item,index)"
+              class="zs-icon zs-unselect zs-tab-close"
+            >&#x1006;</i>
           </li>
         </template>
       </ul>
@@ -27,67 +50,109 @@
   </div>
 </template>
 <script>
-  import {mapMutations, mapState} from 'vuex'
-
-  export default {
-    name: "zs-nav-tab",
-    data() {
-      return {
-        offsetLeft: 0,
-        tabBoxWith: 0,
-        len: 0,
-        showClosePanl: false,
+export default {
+  name: "zs-nav-tab",
+  props: {
+    dataList: {
+      type: Array,
+      default: () => {
+        [];
+      }
+    }
+  },
+  data() {
+    return {
+      offsetLeft: 0,
+      tabBoxWith: 0,
+      len: 0,
+      showClosePanl: false
+    };
+  },
+  mounted() {
+    this.$nextTick(function() {
+      this.tabBoxWith = this.$refs.tab.clientWidth;
+    });
+  },
+  methods: {
+    removeItem(item, index) {
+      this.$emit("removeItem", { item: item, index: index });
+    },
+    clickItem(item, index) {
+      this.$emit("clickItem", { item: item, index: index });
+    },
+    closeCur() {
+      this.showClosePanl = false;
+      for (let i = 0; i < this.dataList.length; i++) {
+        let item = this.dataList[i];
+        if (item.isSelect) {
+          this.$emit("removeItem", { item: this.dataList[i], index: i });
+        }
       }
     },
-    mounted() {
-      this.$nextTick(function () {
-        this.tabBoxWith = this.$refs.tab.clientWidth;
-      });
+    closeOther() {
+      this.showClosePanl = false;
+      this.$emit("removeOther");
     },
-    methods: {
-      removeItem(item, index) {
-        this.remove({item: item, index: index});
-      },
-      clickItem(item, index) {
-        this.setSelect({item: item, index: index});
-      },
-      closeCur() {
-        this.showClosePanl = false;
-        for (let i = 0; i < this.dataList.length; i++) {
-          let item = this.dataList[i];
-          if (item.isSelect) {
-            this.remove({item: this.dataList[i], index: i});
+    closeAll() {
+      this.showClosePanl = false;
+      this.$emit("removeAll");
+    },
+    tabMoveLeft() {
+      if (this.offsetLeft == 0) return;
+      let $tabUL = this.$refs.tabUl;
+      let $childs = $tabUL.childNodes;
+      let childWidth = 0;
+      for (let i = $childs.length - 1; i >= 0; i--) {
+        let $child = $childs[i];
+        if ($child.offsetLeft + this.offsetLeft < 0) {
+          childWidth += $child.offsetWidth;
+          if (childWidth > this.tabBoxWith) {
+            this.offsetLeft = -$child.offsetLeft - $child.offsetWidth;
+            break;
           }
         }
-      },
-      closeOther() {
-        this.showClosePanl = false;
-        this.removeOther();
-      },
-      closeAll() {
-        this.showClosePanl = false;
-        this.removeAll();
-      },
-      tabMoveLeft() {
-        if (this.offsetLeft == 0) return;
+      }
+      if (childWidth <= this.tabBoxWith) {
+        this.offsetLeft = 0;
+      }
+    },
+    tabMoveRight() {
+      let $tabUL = this.$refs.tabUl;
+      let $childs = $tabUL.childNodes;
+      let childWidth = 0;
+      let leftPreChild;
+      for (let i = 0; i < $childs.length; i++) {
+        let $child = $childs[i];
+        if ($child.offsetLeft + this.offsetLeft >= 0) {
+          childWidth += $child.offsetWidth;
+          if (childWidth > this.tabBoxWith) {
+            this.offsetLeft = -$child.offsetLeft;
+            break;
+          }
+        }
+      }
+    },
+    tabMoveByAddItem() {
+      this.$nextTick(function() {
         let $tabUL = this.$refs.tabUl;
         let $childs = $tabUL.childNodes;
         let childWidth = 0;
         for (let i = $childs.length - 1; i >= 0; i--) {
           let $child = $childs[i];
-          if ($child.offsetLeft + this.offsetLeft < 0) {
-            childWidth += $child.offsetWidth;
-            if (childWidth > this.tabBoxWith) {
-              this.offsetLeft = -$child.offsetLeft - $child.offsetWidth;
-              break;
-            }
+          childWidth += $child.offsetWidth;
+          if (childWidth > this.tabBoxWith) {
+            this.offsetLeft = -$child.offsetLeft - $child.offsetWidth;
+            break;
           }
         }
         if (childWidth <= this.tabBoxWith) {
           this.offsetLeft = 0;
         }
-      },
-      tabMoveRight() {
+      });
+    },
+    tabMoveByRemoveItem() {
+      this.$nextTick(function() {
+        if (this.offsetLeft == 0) return;
         let $tabUL = this.$refs.tabUl;
         let $childs = $tabUL.childNodes;
         let childWidth = 0;
@@ -96,19 +161,39 @@
           let $child = $childs[i];
           if ($child.offsetLeft + this.offsetLeft >= 0) {
             childWidth += $child.offsetWidth;
-            if (childWidth > this.tabBoxWith) {
-              this.offsetLeft = -$child.offsetLeft;
-              break;
-            }
+          } else {
+            leftPreChild = $child;
           }
         }
-      },
-      tabMoveByAddItem() {
-        this.$nextTick(function () {
-          let $tabUL = this.$refs.tabUl;
-          let $childs = $tabUL.childNodes;
+        if (childWidth < this.tabBoxWith) {
+          if (leftPreChild) {
+            this.offsetLeft = -leftPreChild.offsetLeft;
+          }
+        }
+      });
+    },
+    tabMoveByCurItem() {
+      this.$nextTick(function() {
+        let $tabUL = this.$refs.tabUl;
+        let $childs = $tabUL.childNodes;
+        let curChild;
+        let curIndex = 0;
+        for (let i = 0; i < $childs.length; i++) {
+          let $child = $childs[i];
+          if ($child.className == "zs-this") {
+            curIndex = i;
+            curChild = $child;
+            break;
+          }
+        }
+        if (curChild.offsetLeft + this.offsetLeft < 0) {
+          this.offsetLeft = -curChild.offsetLeft;
+        } else if (
+          curChild.offsetLeft + curChild.offsetWidth + this.offsetLeft >
+          this.tabBoxWith
+        ) {
           let childWidth = 0;
-          for (let i = $childs.length - 1; i >= 0; i--) {
+          for (let i = curIndex; i >= 0; i--) {
             let $child = $childs[i];
             childWidth += $child.offsetWidth;
             if (childWidth > this.tabBoxWith) {
@@ -116,307 +201,240 @@
               break;
             }
           }
-          if (childWidth <= this.tabBoxWith) {
-            this.offsetLeft = 0;
-          }
-        });
-      },
-      tabMoveByRemoveItem() {
-        this.$nextTick(function () {
-          if (this.offsetLeft == 0) return;
-          let $tabUL = this.$refs.tabUl;
-          let $childs = $tabUL.childNodes;
-          let childWidth = 0;
-          let leftPreChild;
-          for (let i = 0; i < $childs.length; i++) {
-            let $child = $childs[i];
-            if ($child.offsetLeft + this.offsetLeft >= 0) {
-              childWidth += $child.offsetWidth;
-            } else {
-              leftPreChild = $child;
-            }
-          }
-          if (childWidth < this.tabBoxWith) {
-            if (leftPreChild) {
-              this.offsetLeft = -leftPreChild.offsetLeft;
-            }
-          }
-        });
-      },
-      tabMoveByCurItem() {
-        this.$nextTick(function () {
-          let $tabUL = this.$refs.tabUl;
-          let $childs = $tabUL.childNodes;
-          let curChild;
-          let curIndex = 0;
-          for (let i = 0; i < $childs.length; i++) {
-            let $child = $childs[i];
-            if ($child.className == "zs-this") {
-              curIndex = i;
-              curChild = $child;
-              break;
-            }
-          }
-          if (curChild.offsetLeft + this.offsetLeft < 0) {
-            this.offsetLeft = -curChild.offsetLeft;
-          } else if (curChild.offsetLeft + curChild.offsetWidth + this.offsetLeft > this.tabBoxWith) {
-            let childWidth = 0;
-            for (let i = curIndex; i >= 0; i--) {
-              let $child = $childs[i];
-              childWidth += $child.offsetWidth;
-              if (childWidth > this.tabBoxWith) {
-                this.offsetLeft = -$child.offsetLeft - $child.offsetWidth;
-                break;
-              }
-            }
-          }
-        });
-      },
-      ...mapMutations(
-        {
-          setSelect: 'SET_CUR_ITEM',
-          remove: 'REMOVE_NAV_ITEM',
-          removeOther: 'REMOVE_OTHER_ITEM',
-          removeAll: 'REMOVE_ALL_ITEM'
         }
-      )
-    },
-    computed: {
-      ...mapState({
-        dataList: state => state.nav.navList,
-      }),
-    },
-    watch: {
-      dataList(newVal, oldVal) {
-        var length = newVal.length;
-        if (length > this.len) {
-          this.tabMoveByAddItem();
-        } else if (length == this.len) {
-          this.tabMoveByCurItem();
-        } else {
-          this.tabMoveByRemoveItem();
-        }
-        this.len = length;
+      });
+    }
+  },
+  watch: {
+    dataList(newVal, oldVal) {
+      var length = newVal.length;
+      if (length > this.len) {
+        this.tabMoveByAddItem();
+      } else if (length == this.len) {
+        this.tabMoveByCurItem();
+      } else {
+        this.tabMoveByRemoveItem();
       }
+      this.len = length;
     }
   }
+};
 </script>
 <style lang="scss" scoped>
-  .zs-pagetabs {
-    height: 40px;
-    line-height: 40px;
-    padding: 0 80px 0 40px;
-    background-color: #fff;
-    box-sizing: border-box;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .1);
-    transition: all .3s;
-    position: fixed;
-    top: 76px;
-    right: 10px;
-    z-index: 999;
-    left: 240px;
+.zs-pagetabs {
+  height: 40px;
+  line-height: 40px;
+  padding: 0 80px 0 40px;
+  background-color: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  position: fixed;
+  top: 76px;
+  right: 10px;
+  z-index: 999;
+  left: 240px;
 
-    .zs-icon-prev {
+  .zs-icon-prev {
+    left: 0;
+    border-left: none;
+    border-right: 1px solid #f6f6f6;
+
+    &:before {
+      content: "\e65a";
+      color: #1bd0a1;
+    }
+  }
+
+  .zs-icon-next {
+    right: 40px;
+
+    &:before {
+      content: "\e65b";
+      color: #1bd0a1;
+    }
+  }
+
+  .zs-icon-down {
+    right: 0;
+
+    .zs-tabs-select.zs-nav {
+      position: absolute;
       left: 0;
-      border-left: none;
-      border-right: 1px solid #f6f6f6;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      background: 0 0;
 
-      &:before {
-        content: "\e65a";
-        color: #1bd0a1;
-      }
-    }
-
-    .zs-icon-next {
-      right: 40px;
-
-      &:before {
-        content: "\e65b";
-        color: #1bd0a1;
-      }
-    }
-
-    .zs-icon-down {
-      right: 0;
-
-      .zs-tabs-select.zs-nav {
+      .zs-nav-child {
+        display: none;
         position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        background: 0 0;
+        top: 40px;
+        left: auto;
+        right: 0;
+        font-size: 14px;
+        min-width: 100%;
+        line-height: 36px;
+        padding: 5px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+        border: 1px solid #d2d2d2;
+        background-color: #fff;
+        z-index: 100;
+        border-radius: 2px;
+        white-space: nowrap;
 
-        .zs-nav-child {
-          display: none;
-          position: absolute;
-          top: 40px;
-          left: auto;
-          right: 0;
-          font-size: 14px;
-          min-width: 100%;
-          line-height: 36px;
-          padding: 5px 0;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
-          border: 1px solid #d2d2d2;
-          background-color: #fff;
-          z-index: 100;
-          border-radius: 2px;
-          white-space: nowrap;
+        dd {
+          position: relative;
 
-          dd {
-            position: relative;
+          a {
+            color: #666;
+            display: block;
+            padding: 0 20px;
+            transition: all 0.3s;
+            -webkit-transition: all 0.3s;
 
-            a {
-              color: #666;
-              display: block;
-              padding: 0 20px;
-              transition: all .3s;
-              -webkit-transition: all .3s;
-
-              &:hover {
-                background-color: #f2f2f2;
-                color: #000;
-              }
+            &:hover {
+              background-color: #f2f2f2;
+              color: #000;
             }
           }
         }
       }
-
-      &:before {
-        content: "\e61a";
-        color: #1bd0a1;
-      }
-
-      &:hover {
-        background-color: #f6f6f6;
-      }
     }
 
-    .zs-tabs-control {
-      position: absolute;
-      top: 0;
-      width: 40px;
-      height: 100%;
-      text-align: center;
-      cursor: pointer;
-      transition: all .3s;
-      -webkit-transition: all .3s;
-      box-sizing: border-box;
-      border-left: 1px solid #f6f6f6;
+    &:before {
+      content: "\e61a";
+      color: #1bd0a1;
     }
 
-    .zs-tab {
-      margin: 0;
-      overflow: hidden;
-      text-align: left !important;
+    &:hover {
+      background-color: #f6f6f6;
     }
+  }
 
-    .zs-tab-title {
-      height: 40px;
-      border: none;
-
-      .zs-this {
-        color: #000;
-        background-color: #f6f6f6;
-
-        &:after {
-          width: 100%;
-          border: none;
-          height: 2px;
-          background-color: #1bd0a1;
-        }
-
-        &:hover {
-          background-color: #f6f6f6;
-
-          &:after {
-            width: 100%;
-          }
-        }
-      }
-
-      li {
-        min-width: 0;
-        line-height: 40px;
-        max-width: 160px;
-        text-overflow: ellipsis;
-        padding-right: 40px;
-        overflow: hidden;
-        color: #666;
-        border-right: 1px solid #f6f6f6;
-        vertical-align: top;
-
-        .zs-tab-close {
-          position: absolute;
-          right: 8px;
-          top: 50%;
-          margin: -7px 0 0;
-          width: 16px;
-          height: 16px;
-          line-height: 16px;
-          border-radius: 50%;
-          font-size: 12px;
-
-          &:hover {
-            background-color: #FF5722;
-            color: #fff;
-          }
-        }
-
-        &:hover {
-          background-color: #f6f6f6;
-
-          &:after {
-            width: 100%;
-          }
-        }
-
-        &:after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 0;
-          height: 2px;
-          border-radius: 0;
-          background-color: #1bd0a1;
-          transition: all .3s;
-          -webkit-transition: all .3s;
-        }
-      }
-    }
+  .zs-tabs-control {
+    position: absolute;
+    top: 0;
+    width: 40px;
+    height: 100%;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    box-sizing: border-box;
+    border-left: 1px solid #f6f6f6;
   }
 
   .zs-tab {
+    margin: 0;
+    overflow: hidden;
     text-align: left !important;
   }
 
   .zs-tab-title {
-    position: relative;
-    left: 0;
     height: 40px;
-    white-space: nowrap;
-    font-size: 0;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    transition: all .2s;
-    -webkit-transition: all .2s;
+    border: none;
+
+    .zs-this {
+      color: #000;
+      background-color: #f6f6f6;
+
+      &:after {
+        width: 100%;
+        border: none;
+        height: 2px;
+        background-color: #1bd0a1;
+      }
+
+      &:hover {
+        background-color: #f6f6f6;
+
+        &:after {
+          width: 100%;
+        }
+      }
+    }
 
     li {
-      display: inline-block;
-      vertical-align: middle;
-      font-size: 14px;
-      transition: all .2s;
-      -webkit-transition: all .2s;
-      position: relative;
+      min-width: 0;
       line-height: 40px;
-      min-width: 65px;
-      padding: 0 15px;
-      text-align: center;
-      cursor: pointer;
+      max-width: 160px;
+      text-overflow: ellipsis;
+      padding-right: 40px;
+      overflow: hidden;
+      color: #666;
+      border-right: 1px solid #f6f6f6;
+      vertical-align: top;
+
+      .zs-tab-close {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        margin: -7px 0 0;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        border-radius: 50%;
+        font-size: 12px;
+
+        &:hover {
+          background-color: #ff5722;
+          color: #fff;
+        }
+      }
+
+      &:hover {
+        background-color: #f6f6f6;
+
+        &:after {
+          width: 100%;
+        }
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        border-radius: 0;
+        background-color: #1bd0a1;
+        transition: all 0.3s;
+        -webkit-transition: all 0.3s;
+      }
     }
   }
+}
 
+.zs-tab {
+  text-align: left !important;
+}
+
+.zs-tab-title {
+  position: relative;
+  left: 0;
+  height: 40px;
+  white-space: nowrap;
+  font-size: 0;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+
+  li {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    position: relative;
+    line-height: 40px;
+    min-width: 65px;
+    padding: 0 15px;
+    text-align: center;
+    cursor: pointer;
+  }
+}
 </style>

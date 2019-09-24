@@ -17,9 +17,9 @@ export default function $axios(options,Vue) {
 
     // request 拦截器
     instance.interceptors.request.use(
-      config => {
-        config.data = qs.stringify(config.data)
-        return config
+      cfg => {
+        //config.data = qs.stringify(config.data)
+        return cfg
       },
       error => {
         return Promise.reject(error) // 在调用的那边可以拿到(catch)你想返回的错误信息

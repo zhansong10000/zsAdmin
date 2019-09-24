@@ -4,8 +4,8 @@
     <transition
       enter-to-class="show-layer-fadeIn"
       leave-to-class="hide-layer-fadeIn">
-      <div v-if="showDialog" class="zs-layer zs-layer-dialog" :style="dialogStyle">
-        <div class="zs-layer-title" :class="{'cursorMove':moveDialog}" v-move="moveDialog">页面层</div>
+      <div v-if="showDialog" class="zs-layer zs-layer-dialog show-layer-fadeIn" :style="dialogStyle">
+        <div class="zs-layer-title" :class="{'cursorMove':moveDialog}" v-move="moveDialog">{{title}}</div>
         <div class="zs-layer-content" :style="'height:'+contentHeight+'px;padding: 10px;'">
           <slot name="content">
 
@@ -47,6 +47,12 @@
       showDialog: {
         type: Boolean,
         default: false
+      },
+      title:{
+        type: String,
+        default: function () {
+          return "";
+        }
       },
       //宽
       width: {
