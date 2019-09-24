@@ -65,7 +65,8 @@ export default {
       navBarStyle: ""
     };
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     onItemClick(item, index) {
       let vm = this;
@@ -92,26 +93,19 @@ export default {
     },
     setActiveItem(item) {
       let vm = this;
-      if (item) {
-        vm.$router.push(item.href);
-      } else {
-        vm.activeIndex = "";
-        vm.$router.push("/");
-        return;
-      }
       for (let i = 0; i < vm.dataList.length; i++) {
         let temp = vm.dataList[i];
         if (temp.children && temp.children.length > 0) {
           for (let j = 0; j < temp.children.length; j++) {
             let childTemp = temp.children[j];
-            if (childTemp.href == item.href) {
+            if (childTemp.name == item.name) {
               temp.isCur = true;
               vm.activeIndex = i + "-" + j;
               break;
             }
           }
         } else {
-          if (temp.href == item.href) {
+          if (temp.name == item.name) {
             vm.activeIndex = i + "-0";
             break;
           }
@@ -223,7 +217,7 @@ export default {
       white-space: nowrap;
       dd {
         a {
-          color: #939393;
+          color: #333;
           padding-left: 40px;
         }
         &:hover {

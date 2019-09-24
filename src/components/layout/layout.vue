@@ -2,9 +2,9 @@
   <div class="main">
     <div class="main-top"></div>
     <div class="main-content">
-      <zs-nav :dataList="navList" :curItem="curItem" @onItemChildClick="add"></zs-nav>
+      <zs-nav :dataList="menuList" :curItem="curItem" @onItemChildClick="add"></zs-nav>
       <zs-nav-tab
-        :dataList="dataList"
+        :dataList="navList"
         @clickItem="setSelect"
         @removeItem="remove"
         @removeOther="removeOther"
@@ -18,7 +18,6 @@
 </template>
 <script>
 // 导入样式
-import "@/assets/css/zsui.css";
 import { mapMutations, mapState } from "vuex";
 import zsNav from "@/components/layout/zsNav";
 import zsNavTab from "@/components/layout/zsNavTab";
@@ -31,7 +30,7 @@ export default {
   },
   data() {
     return {
-      navList: [
+      menuList: [
         {
           name: "工具",
           href: "a"
@@ -162,21 +161,36 @@ export default {
   methods: {
     redirectRoute() {
       let path = this.$route.path.replace(/\//g, "");
-      let curItem = {};
-      for (let item of this.navList) {
+      let curItem = this.getNavItemByPath(path);
+      if (!curItem) {
+        let flag = this.$route.meta.flag;
+        curItem = this.getNavItemByPath(flag);
+        curItem.href = path;
+      }
+      this.add(curItem);
+    },
+    getNavItemByPath(path) {
+      let curItem = null;
+      for (let item of this.menuList) {
         if (item.href == path) {
-          curItem = item;
+          curItem = {
+            href: item.href,
+            name: item.name
+          };
         } else {
           if (item.children) {
             for (let child of item.children) {
               if (child.href == path) {
-                curItem = child;
+                curItem = {
+                  href: child.href,
+                  name: child.name
+                };
               }
             }
           }
         }
       }
-      this.add(curItem);
+      return curItem;
     },
     ...mapMutations({
       add: "ADD_NAV_ITEM",
@@ -189,8 +203,24 @@ export default {
   computed: {
     ...mapState({
       curItem: state => state.nav.curItem,
-      dataList: state => state.nav.navList
+      navList: state => state.nav.navList
     })
+  },
+  watch: {
+    curItem(newVal, oldVal) {
+      this.$router.push(newVal.href);
+    },
+    $route(to, from) {
+      let fromFlag = from.meta.flag;
+      let toFlag = to.meta.flag;
+      let vm = this;
+      if (fromFlag && toFlag && fromFlag == toFlag) {
+        let toPath = to.path.replace(/\//g, "");
+        let item = vm.getNavItemByPath(toFlag);
+        item.href = toPath;
+        vm.setSelect(item);
+      }
+    }
   }
 };
 </script>

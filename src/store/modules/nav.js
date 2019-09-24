@@ -1,16 +1,14 @@
-import Vue from 'vue';
+import Vue from "vue";
 
-const ADD_NAV_ITEM = 'ADD_NAV_ITEM';//添加标签
-const REMOVE_NAV_ITEM = 'REMOVE_NAV_ITEM';//移除标签
-const REMOVE_OTHER_ITEM = 'REMOVE_OTHER_ITEM';//移除其他标签
-const REMOVE_ALL_ITEM = 'REMOVE_ALL_ITEM';//移除全部标签
-const SET_CUR_ITEM = 'SET_CUR_ITEM';//设置当前标签
-
-
+const ADD_NAV_ITEM = "ADD_NAV_ITEM"; //添加标签
+const REMOVE_NAV_ITEM = "REMOVE_NAV_ITEM"; //移除标签
+const REMOVE_OTHER_ITEM = "REMOVE_OTHER_ITEM"; //移除其他标签
+const REMOVE_ALL_ITEM = "REMOVE_ALL_ITEM"; //移除全部标签
+const SET_CUR_ITEM = "SET_CUR_ITEM"; //设置当前标签
 const state = {
   navList: [], //导航列表
   curItem: {} //当前选中项
-}
+};
 const mutations = {
   [ADD_NAV_ITEM](state, item) {
     let isExist = false;
@@ -18,7 +16,6 @@ const mutations = {
       let temp = state.navList[i];
       if (temp.name == item.name) {
         temp.isSelect = true;
-        state.curItem = temp;
         isExist = true;
       } else {
         temp.isSelect = false;
@@ -27,9 +24,9 @@ const mutations = {
     }
     if (state.navList.length == 0 || !isExist) {
       item.isSelect = true;
-      state.curItem = item;
       state.navList.push(item);
     }
+    state.curItem = item;
   },
   [REMOVE_NAV_ITEM](state, itemObj) {
     let item = itemObj.item;
@@ -42,7 +39,7 @@ const mutations = {
       var nextItem = state.navList[nextIndex];
       if (nextItem) {
         nextItem.isSelect = true;
-        state.curItem = nextItem
+        state.curItem = nextItem;
         Vue.set(state.navList, nextIndex, nextItem);
       } else {
         state.curItem = null;
@@ -50,11 +47,15 @@ const mutations = {
     }
     state.navList.splice(index, 1);
   },
-  [SET_CUR_ITEM](state, itemObj) {
-    let item = itemObj.item;
-    let index = itemObj.index;
-    for (let temp of state.navList) {
-      temp.isSelect = false;
+  [SET_CUR_ITEM](state, item) {
+    let index = 0;
+    for (let i = 0; i < state.navList.length; i++) {
+      let temp = state.navList[i];
+      if (temp.name == item.name) {
+        index = i;
+      } else {
+        temp.isSelect = false;
+      }
     }
     item.isSelect = true;
     state.curItem = item;
@@ -67,13 +68,13 @@ const mutations = {
     state.curItem = null;
     state.navList = [];
   }
-}
+};
 
-const actions = {}
-const getters = {}
+const actions = {};
+const getters = {};
 export default {
   state,
   mutations,
   actions,
   getters
-}
+};

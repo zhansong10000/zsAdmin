@@ -37,7 +37,7 @@
     <div class="zs-tab" ref="tab">
       <ul :style="'left: '+offsetLeft+'px;'" class="zs-tab-title" ref="tabUl">
         <template v-for="(item,index) in dataList">
-          <li :class="{'zs-this':item.isSelect}" @click="clickItem(item,index)">
+          <li :class="{'zs-this':item.isSelect}" @click="clickItem(item)">
             <span>{{item.name}}</span>
             <i
               @click.stop="removeItem(item,index)"
@@ -77,8 +77,8 @@ export default {
     removeItem(item, index) {
       this.$emit("removeItem", { item: item, index: index });
     },
-    clickItem(item, index) {
-      this.$emit("clickItem", { item: item, index: index });
+    clickItem(item) {
+      this.$emit("clickItem", item);
     },
     closeCur() {
       this.showClosePanl = false;
