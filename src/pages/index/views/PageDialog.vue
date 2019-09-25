@@ -57,7 +57,7 @@ export default {
       zsMessage
         .confirm("内容", "标题")
         .then(action => {
-       this.back();
+          this.back();
         })
         .catch(action => {
           alert(action);

@@ -258,10 +258,6 @@ export default {
     border: 1px solid #d8dde3;
     border-top: none;
     background: #fff;
-    .main-page {
-      width: 100%;
-      padding: 0 20px;
-    }
   }
 }
 </style>
