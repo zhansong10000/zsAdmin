@@ -11,7 +11,14 @@
         @removeAll="removeAll"
       ></zs-nav-tab>
       <div class="content">
-        <router-view />
+        <transition name="el-fade-in-linear" mode="out-in">
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive"></router-view>
+          </keep-alive>
+        </transition>
+        <transition name="el-fade-in-linear" mode="out-in">
+          <router-view v-if="!$route.meta.keepAlive"></router-view>
+        </transition>
       </div>
     </div>
   </div>
@@ -163,9 +170,11 @@ export default {
       let path = this.$route.path.replace(/\//g, "");
       let curItem = this.getNavItemByPath(path);
       if (!curItem) {
-        let flag = this.$route.meta.flag;
-        curItem = this.getNavItemByPath(flag);
-        curItem.href = path;
+        let name = this.$route.meta.navName;
+        curItem = {
+          href: this.$route.fullPath,
+          name: name
+        };
       }
       this.add(curItem);
     },
@@ -211,15 +220,17 @@ export default {
       this.$router.push(newVal.href);
     },
     $route(to, from) {
-      let fromFlag = from.meta.flag;
-      let toFlag = to.meta.flag;
       let vm = this;
-      if (fromFlag && toFlag && fromFlag == toFlag) {
-        let toPath = to.path.replace(/\//g, "");
-        let item = vm.getNavItemByPath(toFlag);
-        item.href = toPath;
-        vm.setSelect(item);
+      let toPath = to.path.replace(/\//g, "");
+      let item = vm.getNavItemByPath(toPath);
+      if (!item) {
+        let name = vm.curItem.navName;
+        item = {
+          name: name,
+          href: to.fullPath
+        };
       }
+      vm.setSelect(item);
     }
   }
 };

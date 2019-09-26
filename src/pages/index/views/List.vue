@@ -11,10 +11,12 @@
       </div>
       <div class="search_item">
         <div class="search_item_title">所属机构：</div>
-        <el-input v-model="searchModel.org"></el-input>
+        <el-select placeholder="请选择" v-model="searchModel.orgCode">
+          <el-option v-for="item in [1,2,3]" :key="item" :label="item" :value="item"></el-option>
+        </el-select>
       </div>
       <div class="search_item">
-        <div class="search_item_title">所属属属机构：</div>
+        <div class="search_item_title">所属机构：</div>
         <el-input v-model="searchModel.org"></el-input>
       </div>
       <div class="search_item">
@@ -23,8 +25,19 @@
           <el-option v-for="item in [1,2,3]" :key="item" :label="item" :value="item"></el-option>
         </el-select>
       </div>
-      <el-button type="primary" icon="el-icon-search" size="small">搜索</el-button>
-      <el-button type="success" icon="el-icon-circle-plus-outline" size="small">新增</el-button>
+      <div class="search_item">
+        <div class="search_item_title">所属机构：</div>
+        <el-input v-model="searchModel.org"></el-input>
+      </div>
+      <div class="search_item">
+        <div class="search_item_title">所属机构：</div>
+        <el-select placeholder="请选择" v-model="searchModel.orgCode">
+          <el-option v-for="item in [1,2,3]" :key="item" :label="item" :value="item"></el-option>
+        </el-select>
+      </div>
+      <el-button type="primary" @click="goA" icon="el-icon-search" size="small">搜索</el-button>
+      <el-button type="info" @click="goB" icon="el-icon-refresh" size="small">重置</el-button>
+      <el-button type="success" @click="go" icon="el-icon-circle-plus-outline" size="small">新增</el-button>
     </div>
     <div class="search_list">
       <el-table :data="tableData" style="width: 100%" :height="tableHeight" border>
@@ -33,13 +46,13 @@
         <el-table-column prop="address" label="地址"></el-table-column>
       </el-table>
     </div>
+    <zs-pagination :total="100" ref="pagination"></zs-pagination>
   </div>
 </template>
 <script>
 import Vue from "vue";
 import mixins from "@/mixins";
-import { zsMessage } from "@/components/zsui/src";
-
+import { pageNo, pageSize, emptyText, loadingText } from "@/utils/constant";
 export default {
   name: "list",
   mixins: [mixins],
@@ -194,11 +207,20 @@ export default {
     };
   },
   mounted() {
-    console.log("list mounted");
+    this.getDataList();
   },
   methods: {
+    getDataList(pageNum = pageNo, pageRow = pageSize) {
+      console.log("pageNo：" + pageNum + " -----pageSize：" + pageRow);
+    },
     go() {
-      this.$router.push({ path: "/aa" });
+      this.$router.push({ path: "/aa?name=zhangsan" });
+    },
+    goA() {
+      this.$router.push({ path: "/c?name=zhangsan" });
+    },
+    goB() {
+      this.$router.push({ path: "/bb?name=zhangsan" });
     }
   }
 };

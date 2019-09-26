@@ -1,11 +1,9 @@
-import zsDialog from '../packages/zsDialog';
-import zsMessage from '../packages/zsMessage';
-import zsTable from '../packages/zsTable';
+import zsDialog from "../packages/zsDialog";
+import zsMessage from "../packages/zsMessage";
+import zsTable from "../packages/zsTable";
+import zsPagination from "../packages/zsPagination";
 
-const components = [
-  zsDialog,
-  zsTable
-]
+const components = [zsDialog, zsTable, zsPagination];
 
 const install = function(Vue, opts = {}) {
   if (install.installed) return;
@@ -15,16 +13,12 @@ const install = function(Vue, opts = {}) {
     Vue.prototype.$confirm = zsMessage.confirm;
   });
 
- // Vue.prototype.$loading = Loading.service;
+  // Vue.prototype.$loading = Loading.service;
 };
 
 /* istanbul ignore if */
-if (typeof window !== 'undefined' && window.Vue) {
+if (typeof window !== "undefined" && window.Vue) {
   install(window.Vue);
 }
 export default install;
-export {
-  zsDialog,
-  zsMessage,
-  zsTable
-}
+export { zsDialog, zsMessage, zsTable };

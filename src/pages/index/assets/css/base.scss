@@ -7,10 +7,10 @@
     border-bottom: 1px solid #00ceab;
     .search_item {
       display: inline-block;
-      margin: 5px 10px 5px 0;
+      margin: 3px 10px 3px 0;
       font-size: 12px;
-      height: 36px;
-      line-height: 36px;
+      height: 33px;
+      line-height: 33px;
       .search_item_title {
         display: inline-block;
         width: 85px;
@@ -23,8 +23,13 @@
       }
       input {
         width: 100%;
-        height: 36px;
-        line-height: 36px;
+        height: 33px;
+        line-height: 33px;
+      }
+    }
+    .search_fisrt_item {
+      .search_item_title {
+        width: auto;
       }
     }
   }

@@ -16,13 +16,33 @@ const mixins = {
     resetDocumentClientHeight() {
       let documentClientHeight = document.documentElement["clientHeight"];
       let contentHeight = documentClientHeight - this.topOffset;
-      let searchPanelHeight = this.$refs.searchPanel.offsetHeight || 0;
-      let tableHeight = documentClientHeight - searchPanelHeight - this.topOffset;
+      let searchPanelHeight = 0;
+      if (this.$refs.searchPanel && this.$refs.searchPanel.offsetHeight) {
+        searchPanelHeight = this.$refs.searchPanel.offsetHeight;
+      }
+      let paginationHeight = 0;
+      if (this.$refs.pagination && this.$refs.pagination.$el.clientHeight) {
+        paginationHeight = this.$refs.pagination.$el.clientHeight;
+      }
+      let tableHeight =
+        documentClientHeight -
+        searchPanelHeight -
+        this.topOffset -
+        paginationHeight;
       window.onresize = () => {
         documentClientHeight = document.documentElement["clientHeight"];
         contentHeight = documentClientHeight - this.topOffset;
-        searchPanelHeight = this.$refs.searchPanel.offsetHeight || 0;
-        tableHeight = documentClientHeight - searchPanelHeight - this.topOffset;
+        if (this.$refs.searchPanel && this.$refs.searchPanel.offsetHeight) {
+          searchPanelHeight = this.$refs.searchPanel.offsetHeight;
+        }
+        if (this.$refs.pagination && this.$refs.pagination.$el.clientHeight) {
+          paginationHeight = this.$refs.pagination.$el.clientHeight;
+        }
+        tableHeight =
+          documentClientHeight -
+          searchPanelHeight -
+          this.topOffset -
+          paginationHeight;
         this.updateClientHeight(documentClientHeight);
         this.updateContentHeight(contentHeight);
         this.updateTableHeight(tableHeight);
@@ -40,6 +60,7 @@ const mixins = {
   computed: {
     ...mapState({
       documentClientHeight: state => state.common.documentClientHeight,
+      contentHeight: state => state.common.contentHeight,
       tableHeight: state => state.common.tableHeight
     })
   }

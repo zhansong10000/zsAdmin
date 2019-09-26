@@ -12,7 +12,7 @@ const F = { template: "<div>F</div>" };
 const G = { template: "<div>G</div>" };
 const H = { template: "<div>H</div>" };
 const I = { template: "<div>I</div>" };
-const A1 = { template: "<div>A1</div>" };
+const A1 = { template: "<div>AA1A1A1A1A11</div>" };
 export default new Router({
   mode: "history",
   routes: [
@@ -20,14 +20,20 @@ export default new Router({
     {
       path: "/aa",
       meta: {
-        flag: "b"
       },
       component: A
     },
     {
+      path: "/bb",
+      meta: {
+        navName: "调试预览"
+      },
+      component: A1
+    },
+    {
       path: "/b",
       meta: {
-        flag: "b"
+        keepAlive: true
       },
       component: B
     },
