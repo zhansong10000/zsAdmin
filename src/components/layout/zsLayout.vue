@@ -1,6 +1,8 @@
 <template>
   <div class="main">
-    <div class="main-top"></div>
+    <div class="main-top">
+      <zs-head></zs-head>
+    </div>
     <div class="main-content">
       <zs-nav :dataList="menuList" :curItem="curItem" @onItemChildClick="add"></zs-nav>
       <zs-nav-tab
@@ -26,12 +28,14 @@
 <script>
 // 导入样式
 import { mapMutations, mapState } from "vuex";
+import zsHead from "@/components/layout/zsHead";
 import zsNav from "@/components/layout/zsNav";
 import zsNavTab from "@/components/layout/zsNavTab";
 
 export default {
-  name: "App",
+  name: "zs-layout",
   components: {
+    "zs-head": zsHead,
     "zs-nav": zsNav,
     "zs-nav-tab": zsNavTab
   },

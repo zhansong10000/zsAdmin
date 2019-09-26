@@ -3,12 +3,10 @@
     <div
       @click="tabMoveLeft"
       class="zs-icon zs-tabs-control zs-icon-prev"
-      layadmin-event="leftPage"
     ></div>
     <div
       @click="tabMoveRight"
       class="zs-icon zs-tabs-control zs-icon-next"
-      layadmin-event="rightPage"
     ></div>
     <div
       @mouseenter="showClosePanl=true"
@@ -19,7 +17,7 @@
         <li class="layui-nav-item">
           <dl
             :class="{'zs-show':showClosePanl}"
-            class="zs-nav-child zs-anim-fadein zs-anim zs-anim-upbit"
+            class="zs-nav-child show-layer-fadeIn"
           >
             <dd>
               <a @click="closeCur" href="javascript:void(0);">关闭当前标签页</a>

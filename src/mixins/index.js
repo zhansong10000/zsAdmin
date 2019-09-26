@@ -2,7 +2,7 @@ import { mapMutations, mapState } from "vuex";
 const mixins = {
   data() {
     return {
-      topOffset: 136
+      topOffset: 146
     };
   },
   created() {},

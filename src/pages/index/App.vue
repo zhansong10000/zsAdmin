@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <layout>
-      <router-view />
-    </layout>
+    <zs-layout></zs-layout>
   </div>
 </template>
 
@@ -11,11 +9,11 @@
 import "@/assets/css/common.scss";
 import "@/assets/css/zsui.css";
 import "@/pages/index/assets/css/base.scss";
-import layout from "@/components/layout/layout.vue";
+import zsLayout from "@/components/layout/zsLayout.vue";
 export default {
   name: "App",
   components: {
-    layout: layout
+    zsLayout: zsLayout
   }
 };
 </script>
