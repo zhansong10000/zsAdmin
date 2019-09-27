@@ -17,11 +17,7 @@
           might be a page titleHere might be a page titleHere might be a page titleHere might be a page titleHere might
           be a page titleHere might be a page titleHere might be a page titleHere might be a page titleHere might be a
           page titleHere might be a page titleHere might be a page titleHere might be a page titleHere might be a page
-          titleHere might be a page titleHere might be a page titleHere might be a page titleHere might be a page
-          titleHere might be a page titleHere might be a page titleHere might be a page titleHere might be a page
-          titleHere might be a page titleHere might be a page titleHere might be a page titleHere might be a page
-          titleHere might be a page titleHere might be a page titleHere might be a page titleHere might be a page
-          titleHere might be a page titleHere might be a page titleHere might be a page titleHere might be a page
+        ght be a page titleHere might be a page titleHere might be a page
           titleHere might be a page title
         </h1>
       </template>

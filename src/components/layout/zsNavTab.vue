@@ -1,13 +1,7 @@
 <template>
-  <div class="zs-pagetabs">
-    <div
-      @click="tabMoveLeft"
-      class="zs-icon zs-tabs-control zs-icon-prev"
-    ></div>
-    <div
-      @click="tabMoveRight"
-      class="zs-icon zs-tabs-control zs-icon-next"
-    ></div>
+  <div class="zs-pagetabs" :style="pagetabsStyle">
+    <div @click="tabMoveLeft" v-if="showMoveBtn" class="zs-icon zs-tabs-control zs-icon-prev"></div>
+    <div @click="tabMoveRight" v-if="showMoveBtn" class="zs-icon zs-tabs-control zs-icon-next"></div>
     <div
       @mouseenter="showClosePanl=true"
       @mouseleave="showClosePanl=false"
@@ -15,10 +9,7 @@
     >
       <ul class="zs-nav zs-tabs-select">
         <li class="layui-nav-item">
-          <dl
-            :class="{'zs-show':showClosePanl}"
-            class="zs-nav-child show-layer-fadeIn"
-          >
+          <dl :class="{'zs-show':showClosePanl}" class="zs-nav-child show-layer-fadeIn">
             <dd>
               <a @click="closeCur" href="javascript:void(0);">关闭当前标签页</a>
             </dd>
@@ -62,12 +53,16 @@ export default {
     return {
       offsetLeft: 0,
       tabBoxWith: 0,
+      totalChildWidth: 0,
       len: 0,
+      pagetabsStyle: {
+        padding: "0 40px 0 0"
+      },
       showClosePanl: false
     };
   },
   mounted() {
-    this.$nextTick(function() {
+    this.$nextTick(() => {
       this.tabBoxWith = this.$refs.tab.clientWidth;
     });
   },
@@ -131,7 +126,7 @@ export default {
       }
     },
     tabMoveByAddItem() {
-      this.$nextTick(function() {
+      this.$nextTick(() => {
         let $tabUL = this.$refs.tabUl;
         let $childs = $tabUL.childNodes;
         let childWidth = 0;
@@ -146,23 +141,27 @@ export default {
         if (childWidth <= this.tabBoxWith) {
           this.offsetLeft = 0;
         }
+        this.totalChildWidth = childWidth;
       });
     },
     tabMoveByRemoveItem() {
-      this.$nextTick(function() {
-        if (this.offsetLeft == 0) return;
+      this.$nextTick(() => {
         let $tabUL = this.$refs.tabUl;
         let $childs = $tabUL.childNodes;
+        let totalChildWidth = 0;
         let childWidth = 0;
         let leftPreChild;
         for (let i = 0; i < $childs.length; i++) {
           let $child = $childs[i];
+          totalChildWidth += $child.offsetWidth;
           if ($child.offsetLeft + this.offsetLeft >= 0) {
             childWidth += $child.offsetWidth;
           } else {
             leftPreChild = $child;
           }
         }
+        this.totalChildWidth = totalChildWidth;
+        if (this.offsetLeft == 0) return;
         if (childWidth < this.tabBoxWith) {
           if (leftPreChild) {
             this.offsetLeft = -leftPreChild.offsetLeft;
@@ -171,7 +170,7 @@ export default {
       });
     },
     tabMoveByCurItem() {
-      this.$nextTick(function() {
+      this.$nextTick(() => {
         let $tabUL = this.$refs.tabUl;
         let $childs = $tabUL.childNodes;
         let curChild;
@@ -201,6 +200,23 @@ export default {
           }
         }
       });
+    }
+  },
+  computed: {
+    showMoveBtn() {
+      let totalChildWidth = this.totalChildWidth - this.offsetLeft;
+      if (this.tabBoxWith > totalChildWidth) {
+        this.offsetLeft = 0;
+        this.pagetabsStyle = {
+          padding: "0 40px 0 0"
+        };
+        return false;
+      } else {
+        this.pagetabsStyle = {
+          padding: "0 80px 0 40px"
+        };
+        return true;
+      }
     }
   },
   watch: {
@@ -347,10 +363,12 @@ export default {
 
       &:hover {
         background-color: #f6f6f6;
-
         &:after {
           width: 100%;
         }
+      }
+      .zs-tab-close {
+        display: inline;
       }
     }
 
@@ -362,10 +380,11 @@ export default {
       padding-right: 40px;
       overflow: hidden;
       color: #666;
-      border-right: 1px solid #f6f6f6;
+      border-right: 1px solid #f7f0f0;
       vertical-align: top;
 
       .zs-tab-close {
+        display: none;
         position: absolute;
         right: 8px;
         top: 50%;
@@ -384,7 +403,9 @@ export default {
 
       &:hover {
         background-color: #f6f6f6;
-
+        .zs-tab-close {
+          display: inline;
+        }
         &:after {
           width: 100%;
         }

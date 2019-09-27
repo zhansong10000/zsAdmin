@@ -1,6 +1,6 @@
 <template>
   <div class="zs_head">
-    <div class="head-left">logo</div>
+    <div class="head-left">后台管理系统</div>
     <div class="head-right">
       <em></em>
       <div class="user-info" @mouseenter="showPanl=true" @mouseleave="showPanl=false">
@@ -37,6 +37,8 @@ export default {
     display: flex;
     align-items: center;
     padding-left: 15px;
+    font-size:24px;
+    font-weight: 600;
     color: #fff;
   }
   .head-right {
@@ -83,6 +85,8 @@ export default {
       top: 54px;
       z-index: 999;
       border: 1px solid #e6ebf5;
+      border-radius: 2px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
       background-color: #fff;
       transform-origin: center top;
       .tab-item {
@@ -91,6 +95,9 @@ export default {
         padding: 0 20px;
         margin: 0;
         color: #28dbac;
+      }
+      .tab-item:hover{
+        background: #f2f2f2;
       }
     }
   }

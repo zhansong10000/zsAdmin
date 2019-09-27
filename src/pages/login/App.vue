@@ -68,7 +68,7 @@
         }
         that.$http({
             method: 'post',
-            url: '/auth/getToken',
+            url: '/auth/getVertifyCode',
             data: {
               loginName: that.userId,
               password: that.userPwd,

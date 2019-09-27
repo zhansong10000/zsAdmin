@@ -6,8 +6,6 @@
 
 <script>
 // 导入样式
-import "@/assets/css/common.scss";
-import "@/assets/css/zsui.css";
 import "@/pages/index/assets/css/base.scss";
 import zsLayout from "@/components/layout/zsLayout.vue";
 export default {

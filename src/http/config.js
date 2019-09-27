@@ -1,7 +1,7 @@
 export default {
   method: 'get',
   // 基础url前缀
-  baseURL: 'mtps-api-auth',
+  baseURL: 'mtps-api-bussiness',
   // 请求头信息
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'

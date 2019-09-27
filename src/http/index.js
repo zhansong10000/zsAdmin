@@ -7,7 +7,7 @@ const install = (Vue,option) => {
     return http(option,Vue)
   }
   Object.defineProperties(Vue.prototype, {
-    // 注意哦，此处挂载在 Vue 原型的 $api 对象上
+    // 注意，此处挂载在 Vue 原型的 $api 对象上
     axios: {
       get() {
         return ajax

@@ -37,7 +37,7 @@
       </div>
       <el-button type="primary" @click="goA" icon="el-icon-search" size="small">搜索</el-button>
       <el-button type="info" @click="goB" icon="el-icon-refresh" size="small">重置</el-button>
-      <el-button type="success" @click="go" icon="el-icon-circle-plus-outline" size="small">新增</el-button>
+      <el-button type="success" @click="showAdd" icon="el-icon-circle-plus-outline" size="small">新增</el-button>
     </div>
     <div class="search_list">
       <el-table :data="tableData" style="width: 100%" :height="tableHeight" border>
@@ -47,15 +47,20 @@
       </el-table>
     </div>
     <zs-pagination :total="100" ref="pagination"></zs-pagination>
+    <list-add ref="addDialog"></list-add>
   </div>
 </template>
 <script>
 import Vue from "vue";
 import mixins from "@/mixins";
 import { pageNo, pageSize, emptyText, loadingText } from "@/utils/constant";
+import listAdd from "./listAdd";
 export default {
   name: "list",
   mixins: [mixins],
+  components: {
+    listAdd
+  },
   data() {
     return {
       searchModel: {
@@ -212,6 +217,12 @@ export default {
   methods: {
     getDataList(pageNum = pageNo, pageRow = pageSize) {
       console.log("pageNo：" + pageNum + " -----pageSize：" + pageRow);
+    },
+    showAdd() {
+      let vm = this;
+      vm.$nextTick(() => {
+        vm.$refs.addDialog.dialogVisible = true;
+      });
     },
     go() {
       this.$router.push({ path: "/aa?name=zhangsan" });

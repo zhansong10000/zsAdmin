@@ -8,7 +8,8 @@ import http from "@/http";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import zsui from "@/components/zsui/src";
-
+import "@/assets/css/common.scss";
+import "@/assets/css/zsui.css";
 //开启debug模式
 Vue.config.productionTip = false;
 Vue.use(http);

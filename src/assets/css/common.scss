@@ -70,7 +70,7 @@ input:-ms-input-placeholder{color: #c4c4c4 !important;}
 .mr-10{margin-right:10px !important;}
 
 /* 修改element-ui 固定样式*/
-.el-input__inner{height:36px;padding:0 10px !important;}
+.el-input__inner{height:30px;padding:0 10px !important;}
 .el-textarea__inner{font-family: "Microsoft Yahei", "Arial Normal", "Arial" !important;padding:5px 10px !important;}
 .el-input__inner,.el-textarea__inner{border-radius: 2px !important;font-size:12px !important;}
 .el-input__inner:focus,.el-textarea__inner:focus{border:1px solid #1bd0a1 !important;}
@@ -153,7 +153,13 @@ input:-ms-input-placeholder{color: #c4c4c4 !important;}
 .el-checkbox__label{font-size:12px !important;}
 .el-checkbox__inner,.el-checkbox__inner:hover{border-color:#1bd0a1 !important;border-radius:0px !important;}
 .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner{background-color:#14c1a1 !important;border-color:#14c1a1 !important;}
-.is-checked:not(.is-checked){background-color: #f0f7ff !important;}
+.is-checked:not(.is-checked){background-color: #f0f7ff !important;}   
+
+.el-radio__label{font-size:12px !important;}
+.el-radio__input.is-checked .el-radio__inner{ border-color:#14c1a1 !important;background:#14c1a1 !important;}
+.el-radio__input.is-checked+.el-radio__label{ color:#14c1a1 !important;}
+
+.el-switch.is-checked .el-switch__core{ border-color:#14c1a1 !important;background:#14c1a1 !important;}
 
 .avatar-uploader .el-upload {border: 1px dashed #d9d9d9;border-radius: 6px;cursor: pointer;position: relative;overflow: hidden;}
 .avatar-uploader .el-upload:hover {border-color: #409EFF;}
