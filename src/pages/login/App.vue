@@ -1,32 +1,35 @@
 <template>
-  <div class="login">
+  <div class="login" style="height:100%">
     <div class="login-header">
-      <!--  <img class="company-logo" src="./../assets/image/company_logo.png"/>-->
-      <div class="web-title">后台管理系统</div>
+       <!-- <img class="company-logo" src="./../assets/image/company_logo.png"/> -->
+      <div class="login-inner">
+        <h1 class="web-title">吉祥社验光配镜中心</h1>
+      </div>
     </div>
     <div class="login-main">
-      <div class="login-panel">
-        <div class="login-form">
-          <div class="login-form-title">登 录 LOGIN</div>
-          <div class="login-form-input login-form-username">
-            <span class="login-user-icon"></span>
-            <input v-model="userId" placeholder="请输入账号" type="text"/>
-          </div>
-          <div class="login-form-input login-form-userpwd">
-            <span class="login-pwd-icon"></span>
-            <input v-model="userPwd" placeholder="请输入密码" type="password"/>
-          </div>
-          <div class="login-vercode">
-            <input v-model="verCode" placeholder="请输入验证码"/>
-            <img class="vercode-image" :src="'data:image/png;base64,'+vertifyCodeSrc" @click = "getCode()"/>
-          </div>
-          <div class="login-info">
-            <div class="auto-login">
-              <el-checkbox>记住密码</el-checkbox>
+      <div class="login-inner">
+        <div class="login-panel">
+          <div class="login-form">
+            <div class="login-form-title">登 录 LOGIN</div>
+            <div class="login-form-input login-form-username" :class="{active: userActive}">
+              <span class="login-user-icon"></span>
+              <input v-model="userName" placeholder="请输入账号" type="text" @focus="errorMsg ='' || toFocus('user')" @blur="toBlur" />
             </div>
-            <div class="error-message">{{errorMsg}}</div>
+            <div class="login-form-input login-form-userpwd" :class="{active: pwdActive}">
+              <span class="login-pwd-icon"></span>
+              <input v-model="pwd" placeholder="请输入密码" type="password" @focus="errorMsg ='' || toFocus('pwd')" @blur="toBlur" />
+            </div>
+            <div class="login-form-input login-vercode" :class="{active: codeActive}">
+              <input v-model="captcha" placeholder="请输入验证码" @focus="errorMsg ='' || toFocus('code')" @blur="toBlur"/>
+              <img class="vercode-image" :src="vertifyCodeSrc" @click="getCode()" />
+            </div>
+            <div class="login-info">
+              <div class="error-message">
+                <span class="error-txt">{{errorMsg}}</span>
+              </div>
+            </div>
+            <div class="login-btn pointer" @click="login">登 录</div>
           </div>
-          <div class="login-btn pointer" @click="login">登 录</div>
         </div>
       </div>
     </div>
@@ -34,237 +37,313 @@
   </div>
 </template>
 <script>
-  // 导入样式
-  import '@/assets/css/common.scss';
-
-  export default {
-    name: 'login',
-    components: {},
-    data() {
-      return {
-        userId: "",
-        userPwd: "",
-        verCode: "",
-        vertifyCodeId: "",
-        vertifyCodeSrc: "",
-        errorMsg:"",
+// 导入样式
+import "@/assets/css/common.scss";
+import { mapMutations } from "vuex";
+export default {
+  name: "login",
+  components: {},
+  data() {
+    return {
+      userName: "",
+      pwd: "",
+      captcha: "",
+      vertifyCodeSrc: "/jxs/page/captcha.jpg",
+      errorMsg: "",
+      userActive: false,
+      pwdActive: false,
+      codeActive: false,
+    };
+  },
+  beforeCreate() {},
+  created() {},
+  mounted() {},
+  methods: {
+    toFocus(val){
+      if (val === 'user') {
+        this.userActive = true
+        this.pwdActive = false
+        this.codeActive = false
+      }
+      else if (val === 'pwd') {
+        this.userActive = false
+        this.pwdActive = true
+        this.codeActive = false
+      }
+      else {
+        this.userActive = false
+        this.pwdActive = false
+        this.codeActive = true
       }
     },
-    beforeCreate() {
-
+    toBlur(){
+      this.userActive = false
+      this.pwdActive = false
+      this.codeActive = false
     },
-    created() {
-      this.getCode();
-    },
-    mounted() {
-    },
-    methods: {
-      login(){
-        let that = this;
-        that.errorMsg = "";
-        if (that.userId === "" || that.userPwd === "" || that.verCode === "") {
-          that.errorMsg = "用户名、密码和验证码不能为空";
-          return;
-        }
-        that.$http({
-            method: 'post',
-            url: '/auth/getVertifyCode',
-            data: {
-              loginName: that.userId,
-              password: that.userPwd,
-              vertifyCodeId: that.vertifyCodeId,
-              vertifyCode: that.verCode,
-            }
+    login() {
+      let that = this;
+      that.errorMsg = "";
+      if (that.userName === "" || that.pwd === "" || that.captcha === "") {
+        that.errorMsg = "用户名、密码和验证码不能为空";
+        return;
+      }
+      that
+        .$http({
+          method: "post",
+          url: "sys/common/login",
+          params: {
+            userName: that.userName,
+            pwd: that.pwd,
+            captcha: that.captcha
           }
-        ).then(result => {
+        })
+        .then(result => {
           if (result.code == 0) {
-
-          }else {
+            let userInfo = result.data;
+            this.setUserInfo(userInfo);
+            window.location.href = "index.html";
+          } else {
             that.errorMsg = result.message;
             that.getCode();
           }
-        }).catch(error => {
-
-        });
-      },
-      getCode() {
-        let that = this;
-        that.$http({
-            method: 'post',
-            url: '/auth/getVertifyCode',
-            data: {
-              width: 113,
-              height: 45
-            }
-          }
-        ).then(result => {
-          if (result.code == 0) {
-            that.vertifyCodeSrc = result.data.vertifyCodeBase64Image;
-            that.vertifyCodeId = result.data.vertifyCodeId;
-          }
-        }).catch(error => {
-
-        });
-      }
-    }
+        })
+        .catch(error => {});
+    },
+    getCode() {
+      this.vertifyCodeSrc = "/jxs/page/captcha.jpg?c=" + Math.random();
+    },
+    ...mapMutations({
+      setUserInfo: "SET_USER_INFO"
+    })
   }
+};
 </script>
-<style lang="scss" scoped>
-  * {
-    margin: 0;
-    padding: 0;
+<style lang="less" scoped>
+* {
+  margin: 0;
+  padding: 0;
+}
+html,body{
+  height: 100%;
+  background: #b2e1ff;
+}
+input:-webkit-autofill , textarea:-webkit-autofill, select:-webkit-autofill {
+    -webkit-text-fill-color: #ededed !important;
+    background-color:transparent;
+    background-image: none;
+    transition: background-color 50000s ease-in-out 0s; //背景色透明  生效时长  过渡效果  启用时延迟的时间
+}
+.login{
+  background: #b2e1ff;
+}
+.login-header {
+  width: 100%;
+  height: 72px;
+  // background: #00ceab;
+  // border-bottom: 1px solid #52ddc3;
+  .login-inner{
+    width: 1200px;
+    margin: 0 auto;
+    &:before{
+      content: "";
+      display: table;
+    }
+  }
+  .company-logo {
+    float: left;
+    margin: 18px 30px;
   }
 
-  .login-header {
-    width: 100%;
-    height: 72px;
-    background: #00ceab;
-    border-bottom: 1px solid #52ddc3;
-
-    .company-logo {
-      float: left;
-      margin: 18px 30px;
-    }
-
-    .web-title {
-      float: left;
-      margin-top: 18px;
-      padding-left: 30px;
-      height: 36px;
-      line-height: 36px;
-      border-left: 1px solid #52ddc3;
-      font-size: 28px;
-      color: #fff;
-    }
-
+  .web-title {
+    // float: left;
+    margin: 25px auto 0;
+    padding-left: 30px;
+    height: 36px;
+    line-height: 36px;
+    // border-left: 1px solid #52ddc3;
+    font-size: 28px;
+    color: #333;
+    font-weight: normal;
+    width: 269px;
+    height: 54px;
+    background: url(assets/image/logo.png) no-repeat top left;
+    text-indent: -9999px;
+    
   }
+}
 
-  .login-main {
-    width: 100%;
-    height: calc(100% - 112px);
-    background: #00ceab;
-    position: absolute;
-    top: 72px;
-    bottom: 40px;
+.login-main {
+  width: 100%;
+  height: calc(100% - 100px);
+  // background: #00ceab;
+  // position: absolute;
+  // top: 72px;
+  // bottom: 40px;
+  // display: flex;
+  // flex-flow: row nowrap;
+  // justify-content: center;
+  // align-items: center;
+  .login-inner{
+    width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    position: relative;
+  }
+  .login-panel {
+    height: 394px;
+    width: 358px;
+    background: #fff;
+    border-radius: 8px;
+    // box-shadow: 2px 2px 5px #ddd;
     display: flex;
     flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
+    // justify-content: center;
+    // position: absolute;
+    // right: 0;
+    // top: 30px;
+    margin: 25px auto;
+    .login-form {
+      padding-top: 20px;
+      width: 300px;
+      margin: 0 auto;
+      input {
+        height: 43px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        color: #464646;
+        padding: 0 14px;
+        outline: none;
+        border-radius: 5px;
+      }
 
-    .login-panel {
-      height: 420px;
-      width: 640px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 2px 2px 5px #888888;
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: center;
+      .login-form-title {
+        font-size: 20px;
+        color: #e52d11;
+        text-align: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+      }
 
-      .login-form {
-        padding-top: 40px;
-        width: 280px;
+      .login-form-input {
+        height: 43px;
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 13px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        &.active{
+          border: 1px solid #aaa;
+          box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+        }
+        input {
+          float: left;
+          width: calc(100% - 47px);
+          border: transparent;
+        }
+        .login-user-icon,.login-pwd-icon{
+           background: url("./assets/image/loginIcon.png") no-repeat;
+           margin-top: 5px;
+        }
+        .login-user-icon {
+          float: left;
+          width: 42px;
+          height: 31px;
+          display: block;
+          background-position: 0 0;
+        }
+
+        .login-pwd-icon {
+          float: left;
+          width: 42px;
+          height: 31px;
+          display: block;
+          background-position: 0 -31px;
+        }
+      }
+
+      .login-vercode {
+        width: 100%;
+        overflow: hidden;
 
         input {
-          height: 45px;
-          border: 1px solid #1bd0a1;
-          font-size: 14px;
-          color: #464646;
-          padding: 0 14px;
+          float: left;
+          width: 165px;
+        }
+
+        .vercode-image {
+          border: none;
+          background: #e4e4e4;
+          color: #000;
+          height: 36px;
+          width: 110px;
+          margin-left: 20px;
           outline: none;
+          letter-spacing: 3px;
+          cursor: pointer;
+          margin-top: 2px;
+          border-radius: 3px;
+        }
+      }
+
+      .login-info {
+        overflow: hidden;
+        border-bottom: 1px dashed #dddee1;
+
+        .auto-login {
+          float: left;
+          line-height: 38px;
         }
 
-        .login-form-title {
-          font-size: 26px;
-          color: #19c59e;
-          text-align: center;
-          margin-bottom: 30px;
+        .error-message {
+          // float: right;
+          height: 30px;
+          line-height: 30px;
+          font-size: 12px;
+          // background: rgba(255,73,73,0.15);
+          border-radius: 2px;
+          margin-bottom: 5px;
+          color: #e52d11;
+          padding-left: 3px;
+          // .error-txt{
+          //   height: 30px;
+          //   line-height: 30px;
+          //   border-radius: 2px;
+          //   padding: 0 10px;
+          //   background: rgba(255,73,73,0.15);
+          // }
         }
+      }
 
-        .login-form-input {
-          height: 45px;
-          width: 100%;
-          overflow: hidden;
-          margin-bottom: 13px;
-
-          input {
-            float: left;
-            width: calc(100% - 47px);
-          }
-
-          .login-user-icon {
-            float: left;
-            width: 45px;
-            height: 45px;
-            display: block;
-            background: #1bd0a1 url("./assets/image/login_user_icon.png") no-repeat center;
-          }
-
-          .login-pwd-icon {
-            float: left;
-            width: 45px;
-            height: 45px;
-            display: block;
-            background: #1bd0a1 url("./assets/image/login_pwd_icon.png") no-repeat center;
-          }
-        }
-
-        .login-vercode {
-          width: 100%;
-          overflow: hidden;
-
-          input {
-            float: left;
-            width: 145px;
-          }
-
-          .vercode-image {
-            border: none;
-            background: #e4e4e4;
-            color: #000;
-            height: 45px;
-            width: 113px;
-            margin-left: 20px;
-            outline: none;
-            letter-spacing: 3px;
-            cursor: pointer;
-          }
-        }
-
-        .login-info {
-          overflow: hidden;
-          border-bottom: 1px dashed #1bd0a1;
-
-          .auto-login {
-            float: left;
-            line-height: 38px;
-          }
-
-          .error-message {
-            float: right;
-            height: 40px;
-            line-height: 40px;
-            font-size: 12px;
-            color: #f66a5c;
-          }
-        }
-
-        .login-btn {
-          margin: 0 auto;
-          margin-top: 30px;
-          width: 100%;
-          height: 40px;
-          line-height: 40px;
-          background: #f6aa01;
-          font-size: 16px;
-          text-align: center;
-          color: #fff;
-          border-radius: 4px;
-          font-family: "SimSun";
-          font-weight: bold;
+      .login-btn {
+        margin: 0 auto;
+        margin-top: 30px;
+        width: 100%;
+        height: 44px;
+        line-height: 44px;
+        background-image: linear-gradient(to right, #e52d11, #ff5e46);
+        font-size: 18px;
+        text-align: center;
+        color: #fff;
+        border-radius: 4px;
+        // font-family: "SimSun";
+        // font-weight: bold;
+        &:hover{
+          background: #e52d11;
         }
       }
     }
   }
-
+}
+.login-footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  height: 86px;
+  line-height: 86px;
+  background: rgba(0,0,0,0.1);
+  color: #fff;
+}
 </style>

@@ -9,8 +9,8 @@ const install = function(Vue, opts = {}) {
   if (install.installed) return;
   components.forEach(component => {
     Vue.component(component.name, component);
-    Vue.prototype.$alert = zsMessage.alert;
-    Vue.prototype.$confirm = zsMessage.confirm;
+    Vue.prototype.$zsalert = zsMessage.alert;
+    Vue.prototype.$zsconfirm = zsMessage.confirm;
   });
 
   // Vue.prototype.$loading = Loading.service;

@@ -1,49 +1,90 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-import A from "../views/PageDialog.vue";
-import B from "../views/List.vue";
+/** 首页 */
+const homepage = r =>
+  require.ensure([], () => r(require("../views/home/homepage")), "homepage");
+/** ######*/
+/** 订单管理 */
+const order = r =>
+  require.ensure([], () => r(require("../views/order/order")), "order");
+/** ######*/
+/** 商铺管理 */
+const shop = r =>
+  require.ensure([], () => r(require("../views/wechat/shop")), "shop");
+/** 客户管理 */
+const customer = r =>
+  require.ensure([], () => r(require("../views/wechat/customer")), "customer");
+
+/** ######*/
+/**供应商管理 */
+const supplier = r =>
+  require.ensure(
+    [],
+    () => r(require("../views/supplier/supplier")),
+    "supplier"
+  );
+/** ######*/
+/**产品类型 */
+const product = r =>
+  require.ensure([], () => r(require("../views/goods/product")), "product");
 
 Vue.use(Router);
-const C = { template: "<div>C</div>" };
-const D = { template: "<div>D</div>" };
-const E = { template: "<div>E</div>" };
-const F = { template: "<div>F</div>" };
-const G = { template: "<div>G</div>" };
-const H = { template: "<div>H</div>" };
-const I = { template: "<div>I</div>" };
-const A1 = { template: "<div>AA1A1A1A1A11</div>" };
+
 export default new Router({
   mode: "history",
   routes: [
-    { path: "/a", component: A },
     {
-      path: "/aa",
-      meta: {
-      },
-      component: A
+      path: "/",
+      redirect: "/homepage"
     },
     {
-      path: "/bb",
+      path: "/homepage",
       meta: {
-        navName: "调试预览"
-      },
-      component: A1
-    },
-    {
-      path: "/b",
-      meta: {
+        navName: "首页",
         keepAlive: true
       },
-      component: B
+      component: homepage
     },
-    { path: "/c", component: C },
-    { path: "/d", component: D },
-    { path: "/e", component: E },
-    { path: "/f", component: F },
-    { path: "/g", component: G },
-    { path: "/h", component: H },
-    { path: "/i", component: I },
-    { path: "/a1", component: A1 }
+    {
+      path: "/order",
+      meta: {
+        navName: "订单管理",
+        keepAlive: true
+      },
+      component: order
+    },
+    {
+      path: "/shop",
+      meta: {
+        navName: "商铺管理",
+        keepAlive: true
+      },
+      component: shop
+    },
+    {
+      path: "/customer",
+      meta: {
+        navName: "公众号客户",
+        keepAlive: true
+      },
+      component: customer
+    },
+    {
+      path: "/supplier",
+      meta: {
+        navName: "供应商管理",
+        keepAlive: true
+      },
+      component: supplier
+    },
+    {
+      path: "/product",
+      meta: {
+        navName: "产品类型",
+        keepAlive: true
+      },
+      component: product
+    }
   ]
 });

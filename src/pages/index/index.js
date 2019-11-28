@@ -10,11 +10,14 @@ import "element-ui/lib/theme-chalk/index.css";
 import zsui from "@/components/zsui/src";
 import "@/assets/css/common.scss";
 import "@/assets/css/zsui.css";
+import install from "@/utils/install"
+
 //开启debug模式
 Vue.config.productionTip = false;
 Vue.use(http);
 Vue.use(ElementUI);
 Vue.use(zsui);
+Vue.use(install);
 new Vue({
   el: "#app",
   router,

@@ -28,10 +28,7 @@
         <template v-for="(item,index) in dataList">
           <li :class="{'zs-this':item.isSelect}" @click="clickItem(item)">
             <span>{{item.name}}</span>
-            <i
-              @click.stop="removeItem(item,index)"
-              class="zs-icon zs-unselect zs-tab-close"
-            >&#x1006;</i>
+            <i @click.stop="removeItem(item,index)" class="zs-icon zs-tab-close"></i>
           </li>
         </template>
       </ul>
@@ -255,8 +252,8 @@ export default {
     border-right: 1px solid #f6f6f6;
 
     &:before {
-      content: "\e65a";
-      color: #1bd0a1;
+      content: "\e779";
+      color: #e52d11;
     }
   }
 
@@ -264,8 +261,8 @@ export default {
     right: 40px;
 
     &:before {
-      content: "\e65b";
-      color: #1bd0a1;
+      content: "\e775";
+      color: #e52d11;
     }
   }
 
@@ -318,8 +315,8 @@ export default {
     }
 
     &:before {
-      content: "\e61a";
-      color: #1bd0a1;
+      content: "\e772";
+      color: #e52d11;
     }
 
     &:hover {
@@ -358,7 +355,7 @@ export default {
         width: 100%;
         border: none;
         height: 2px;
-        background-color: #1bd0a1;
+        background-color: #e52d11;
       }
 
       &:hover {
@@ -394,7 +391,9 @@ export default {
         line-height: 16px;
         border-radius: 50%;
         font-size: 12px;
-
+        &:before {
+          content: "\e723";
+        }
         &:hover {
           background-color: #ff5722;
           color: #fff;
@@ -419,7 +418,7 @@ export default {
         width: 0;
         height: 2px;
         border-radius: 0;
-        background-color: #1bd0a1;
+        background-color: #e52d11;
         transition: all 0.3s;
         -webkit-transition: all 0.3s;
       }

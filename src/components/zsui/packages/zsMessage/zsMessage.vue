@@ -176,7 +176,7 @@
       }
       .zs-icon-close {
         &:before {
-          content: "\1006";
+         content: "\e723";
         }
       }
     }

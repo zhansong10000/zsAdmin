@@ -160,7 +160,8 @@ export default {
 
   .zs-nav-item {
     position: relative;
-    background: #e0f9f2;
+    // background: #e0f9f2;
+    background: #f9f9f9;
     margin-bottom: 1px;
     vertical-align: middle;
     line-height: 45px;
@@ -182,7 +183,7 @@ export default {
       white-space: nowrap;
       display: block;
       padding: 0 20px;
-      color: #1bd0a1;
+      color: #333;
       transition: all 0.3s;
       -webkit-transition: all 0.3s;
 
@@ -191,17 +192,17 @@ export default {
         width: 0;
         height: 0;
         border-style: solid dashed dashed;
-        border-color: #1bd0a1 transparent transparent;
+        border-color: #aaa transparent transparent;
         overflow: hidden;
         cursor: pointer;
         transition: all 0.2s;
         -webkit-transition: all 0.2s;
         position: absolute;
         top: 50%;
-        right: 10px;
+        right: 15px;
         margin-top: 0;
         border-width: 5px;
-        border-top-color: #1bd0a1;
+        border-top-color: #aaa;
       }
     }
 
@@ -225,7 +226,7 @@ export default {
       }
       .zs-this {
         &:hover {
-          background: #1bd0a1;
+          // background: #e52d11;
           a {
             color: #fff;
           }
@@ -239,7 +240,7 @@ export default {
       .zs-nav-more {
         margin-top: -9px;
         border-style: dashed dashed solid;
-        border-color: transparent transparent #1bd0a1;
+        border-color: transparent transparent #e52d11;
       }
     }
     .zs-nav-child {
@@ -247,18 +248,32 @@ export default {
       padding: 0;
       background: #fff;
       .zs-this {
-        background: #1bd0a1;
+        // background: #1bd0a1;
         a {
-          color: #fff;
+          color: #e52d11;
         }
       }
     }
   }
   .zs-this {
-    background: #1bd0a1;
+    background: rgba(229,45,17,.05);
     a {
-      color: #fff;
+      color: #e52d11;
+      position: relative;
+      
     }
+    > a{
+      &:before{
+        content: "";
+        position: absolute;
+        width: 5px;
+        height: 45px;
+        left: 0;
+        top: 0;
+        background-color: #e52d11;
+      }
+    }
+    
   }
 
   .zs-nav-bar {
@@ -266,7 +281,7 @@ export default {
     z-index: 1000;
     width: 5px;
     height: 0;
-    background-color: #1bd0a1;
+    background-color: #e52d11;
   }
 }
 </style>

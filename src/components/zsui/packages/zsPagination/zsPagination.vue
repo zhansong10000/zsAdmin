@@ -130,6 +130,14 @@ export default {
       }
       return list;
     }
+  },
+  watch: {
+    currentPage(val) {
+      this.current = val;
+    },
+    pageSize(val) {
+      this.size = val;
+    }
   }
 };
 </script>
@@ -201,7 +209,7 @@ export default {
       padding: 0;
       width: 100%;
       height: 100%;
-      background-color: #00ceab;
+      background-color: #e52d11;
     }
     em {
       position: relative;

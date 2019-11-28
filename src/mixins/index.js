@@ -2,7 +2,7 @@ import { mapMutations, mapState } from "vuex";
 const mixins = {
   data() {
     return {
-      topOffset: 146
+      topOffset: 180
     };
   },
   created() {},
@@ -13,6 +13,11 @@ const mixins = {
   },
   activated() {},
   methods: {
+    tableScollToTop() {
+      if (this.$refs.searchTable) {
+        this.$refs.searchTable.bodyWrapper.scrollTop = 0;
+      }
+    },
     resetDocumentClientHeight() {
       let documentClientHeight = document.documentElement["clientHeight"];
       let contentHeight = documentClientHeight - this.topOffset;
@@ -20,29 +25,15 @@ const mixins = {
       if (this.$refs.searchPanel && this.$refs.searchPanel.offsetHeight) {
         searchPanelHeight = this.$refs.searchPanel.offsetHeight;
       }
-      let paginationHeight = 0;
-      if (this.$refs.pagination && this.$refs.pagination.$el.clientHeight) {
-        paginationHeight = this.$refs.pagination.$el.clientHeight;
-      }
       let tableHeight =
-        documentClientHeight -
-        searchPanelHeight -
-        this.topOffset -
-        paginationHeight;
+        documentClientHeight - searchPanelHeight - this.topOffset;
       window.onresize = () => {
         documentClientHeight = document.documentElement["clientHeight"];
         contentHeight = documentClientHeight - this.topOffset;
         if (this.$refs.searchPanel && this.$refs.searchPanel.offsetHeight) {
           searchPanelHeight = this.$refs.searchPanel.offsetHeight;
         }
-        if (this.$refs.pagination && this.$refs.pagination.$el.clientHeight) {
-          paginationHeight = this.$refs.pagination.$el.clientHeight;
-        }
-        tableHeight =
-          documentClientHeight -
-          searchPanelHeight -
-          this.topOffset -
-          paginationHeight;
+        tableHeight = documentClientHeight - searchPanelHeight - this.topOffset;
         this.updateClientHeight(documentClientHeight);
         this.updateContentHeight(contentHeight);
         this.updateTableHeight(tableHeight);
@@ -62,7 +53,14 @@ const mixins = {
       documentClientHeight: state => state.common.documentClientHeight,
       contentHeight: state => state.common.contentHeight,
       tableHeight: state => state.common.tableHeight
-    })
+    }),
+    contentStyle() {
+      let vm = this;
+      let style = {
+        height: vm.contentHeight + "px"
+      };
+      return style;
+    }
   }
 };
 

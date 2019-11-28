@@ -13,12 +13,12 @@
         @removeAll="removeAll"
       ></zs-nav-tab>
       <div class="content">
-        <transition name="el-fade-in-linear" mode="out-in">
+        <transition name="slide-fade" mode="out-in">
           <keep-alive>
             <router-view v-if="$route.meta.keepAlive"></router-view>
           </keep-alive>
         </transition>
-        <transition name="el-fade-in-linear" mode="out-in">
+        <transition name="slide-fade" mode="out-in">
           <router-view v-if="!$route.meta.keepAlive"></router-view>
         </transition>
       </div>
@@ -43,27 +43,53 @@ export default {
     return {
       menuList: [
         {
-          name: "工具",
-          href: "a"
+          name: "首页",
+          href: "homepage"
         },
+
         {
-          name: "开发工具",
+          name: "商户管理",
           children: [
             {
-              name: "调试预览",
-              href: "b"
+              name: "商铺管理",
+              href: "shop"
+            },
+            {
+              name: "公众号客户",
+              href: "customer"
             }
           ]
         },
         {
-          name: "布局",
+          name: "订单中心",
           children: [
             {
-              name: "栅格",
-              href: "c"
+              name: "订单管理",
+              href: "order"
             },
             {
-              name: "后台布局",
+              name: "订单统计",
+              href: "orderCount"
+            }
+          ]
+        },
+        {
+          name: "供应商管理",
+          href: "supplier"
+        },
+        {
+          name: "商品管理",
+          children: [
+            {
+              name: "产品类型",
+              href: "product"
+            },
+            {
+              name: "品牌管理",
+              href: "d"
+            },
+            {
+              name: "商品管理",
               href: "d"
             }
           ]
@@ -167,11 +193,25 @@ export default {
     };
   },
   mounted() {
-    this.redirectRoute();
+    // this.getModules();
+    //this.redirectRoute();
   },
+
   methods: {
+    getModules() {
+      this.$http({
+        method: "post",
+        url: "sys/user/getModules"
+      })
+        .then(result => {
+          if (result.code == 0) {
+          }
+        })
+        .catch(error => {});
+    },
     redirectRoute() {
       let path = this.$route.path.replace(/\//g, "");
+      if (!path || path == "") return;
       let curItem = this.getNavItemByPath(path);
       if (!curItem) {
         let name = this.$route.meta.navName;
@@ -228,11 +268,18 @@ export default {
       let toPath = to.path.replace(/\//g, "");
       let item = vm.getNavItemByPath(toPath);
       if (!item) {
-        let name = vm.curItem.navName;
-        item = {
-          name: name,
-          href: to.fullPath
-        };
+        let name = vm.curItem.name;
+        if (!name) {
+          item = {
+            name: to.meta.navName,
+            href: to.fullPath
+          };
+        } else {
+          item = {
+            name: name,
+            href: to.fullPath
+          };
+        }
       }
       vm.setSelect(item);
     }
@@ -248,7 +295,8 @@ export default {
   .main-top {
     width: 100%;
     height: 66px;
-    background: #00ceab;
+    // background: #00ceab;
+    background-image: linear-gradient(to right, #e52d11, #ff5e46);
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: justify;

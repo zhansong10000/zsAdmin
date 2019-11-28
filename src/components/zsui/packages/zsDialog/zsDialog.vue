@@ -1,12 +1,8 @@
 <template>
   <div>
-    <div v-if="showDialog" class="zs-layer-shade" :style="shadeStyle"></div>
-    <transition enter-to-class="show-layer-fadeIn" leave-to-class="hide-layer-fadeIn">
-      <div
-        v-if="showDialog"
-        class="zs-layer zs-layer-dialog show-layer-fadeIn"
-        :style="dialogStyle"
-      >
+    <div v-if="visable" class="zs-layer-shade" :style="shadeStyle"></div>
+    <transition leave-to-class="hide-layer-fadeIn">
+      <div v-if="visable" class="zs-layer zs-layer-dialog show-layer-fadeIn" :style="dialogStyle">
         <div class="zs-layer-title" :class="{'cursorMove':moveDialog}" v-move="moveDialog">{{title}}</div>
         <div class="zs-layer-content" :style="'height:'+contentHeight+'px;padding: 10px;'">
           <slot name="content"></slot>
@@ -34,6 +30,7 @@ export default {
   },
   data() {
     return {
+      visable: false,
       shadeStyle: "",
       dialogStyle: "",
       contentHeight: 0,
@@ -119,10 +116,10 @@ export default {
       this.dialogStyle = dialogStyleArray.join("");
       if (this.$slots && this.$slots.button) {
         this.showBtn = true;
-        this.contentHeight = this.height - 115;
+        this.contentHeight = this.height - 105;
       } else {
         this.showBtn = false;
-        this.contentHeight = this.height - 65;
+        this.contentHeight = this.height - 55;
       }
     },
     close() {
@@ -131,6 +128,7 @@ export default {
   },
   watch: {
     showDialog(val) {
+      this.visable = val;
       if (val) {
         if (this.appendToBody) {
           document.body.appendChild(this.$el);
@@ -209,12 +207,12 @@ export default {
     }
     .zs-icon-close {
       &:before {
-        content: "\1006";
+        content: "\e723";
       }
     }
   }
   .zs-layer-btn {
-    text-align: right;
+    text-align: center;
     height: 45px;
     line-height: 45px;
     vertical-align: middle;
